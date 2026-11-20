@@ -63,6 +63,12 @@ def report():
     }
 
 
+def _pairs(source):
+    """Pairs without direction: (a, b) and (b, a) count once."""
+    return len({tuple(sorted((r["name_a"], r["name_b"])))
+                for r in db.query("SELECT name_a, name_b FROM lasa_pairs WHERE source = ?", (source,))})
+
+
 def _safety(drugs, moieties, any_in):
     """Look-alike names, side effects, RxNorm names and OTC ingredients."""
     from .lasa import brand
@@ -73,12 +79,12 @@ def _safety(drugs, moieties, any_in):
     se_all = se_ing | {m for m, n in rx.items() if n and moiety_key(n) in se_ing}
     combos = {r["status"]: r["n"] for r in db.query("SELECT status, COUNT(*) AS n FROM combo_suggestions GROUP BY status")}
     return {
-        "lasa_pairs_ismp": db.one("SELECT COUNT(*) AS n FROM lasa_pairs WHERE source = 'ISMP'")["n"] // 2,
-        "lasa_pairs_local": db.one("SELECT COUNT(*) AS n FROM lasa_pairs WHERE source = 'Badeel'")["n"] // 2,
+        "lasa_pairs_ismp": _pairs("ISMP"),
+        "lasa_pairs_local": _pairs("Badeel"),
         "products_with_lasa": sum(brand(d["trade_name"]) in lasa_names or any_in(d, lasa_names) for d in drugs),
         "side_effect_rows": db.one("SELECT COUNT(*) AS n FROM ingredient_side_effects")["n"],
         "products_with_side_effects": sum(any_in(d, se_all) for d in drugs),
-        "rxnorm_checked": len(rx), "rxnorm_found": sum(1 for n in rx.values() if n),
+        "rxnorm_checked": len(moieties & set(rx)), "rxnorm_found": sum(1 for m in moieties if rx.get(m)),
         "ingredients": len(moieties),
         "otc_ingredients": len(otc), "products_otc": sum(any_in(d, otc) for d in drugs),
         "combos": combos,
@@ -119,7 +125,7 @@ def as_text(r):
             "Safety data",
             f"  Look-alike pairs (ISMP list)        : {r['lasa_pairs_ismp']:,}",
             f"  Look-alike Egyptian brand pairs     : {r['lasa_pairs_local']:,}",
-            f"  Products with a look-alike warning  : {_pct(r['products_with_lasa'], r['products'])}",
+            f"  Products named in a look-alike pair : {_pct(r['products_with_lasa'], r['products'])}",
             f"  SIDER side-effect rows              : {r['side_effect_rows']:,}",
             f"  Products with side effects          : {_pct(r['products_with_side_effects'], r['products'])}",
             f"  Ingredients checked in RxNorm       : {_pct(r['rxnorm_checked'], r['ingredients'])}",
