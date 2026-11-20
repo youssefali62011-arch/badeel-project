@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% from "_macros.html" import drug_name, availability with context %}
+{% from "_icons.html" import icon %}
+{% block title %}{{ _('What could help?', 'إيه اللي ممكن يساعد؟') }}{% endblock %}
+{% block content %}
+<header class="dash-head">
+  <div>
+    <h1>{{ _('What could help with what I feel?', 'إيه اللي ممكن يساعد في اللي حاسس بيه؟') }}</h1>
+    <p>{{ _('Tick up to 6 symptoms. Badeel lists the active ingredients used for them, so you can ask your pharmacist or doctor.', 'علّم على لحد 6 أعراض. بديل بيعرضلك المواد الفعالة اللي بتُستخدم ليها، علشان تسأل عليها الصيدلي أو الطبيب.') }}</p>
+  </div>
+</header>
+<div class="alert warn"><strong>{{ _('Information only, not a prescription.', 'معلومات بس، مش روشتة.') }}</strong>
+  {{ _('Ask a pharmacist or doctor before taking any medicine, especially for children, during pregnancy, or with a long-term illness.', 'اسأل الصيدلي أو الطبيب قبل ما تاخد أي دواء، خصوصاً للأطفال، أو في الحمل، أو لو عندك مرض مزمن.') }}</div>
+
+{% if flags %}
+<div class="risk-banner" role="alert">
+  {{ icon('alert') }}
+  <div><strong>{{ _('See a doctor now, or call emergency services (123).', 'روح لدكتور دلوقتي، أو كلّم الإسعاف (123).') }}</strong>
+    <p>{{ _('You ticked a danger sign:', 'علّمت على علامة خطر:') }} {% for f in flags %}<b>{{ _(f.label_en, f.label_ar) }}</b>{{ '، ' if lang == 'ar' and not loop.last else (', ' if not loop.last) }}{% endfor %}.
+    {{ _('This needs a doctor, not a medicine from the pharmacy.', 'دي محتاجة دكتور، مش دواء من الصيدلية.') }}</p></div>
+</div>
+{% endif %}
+
+<form class="symptom-form" method="get">
+  {% for key, en, ar in areas %}
+  <fieldset><legend>{{ _(en, ar) }}</legend>
+    <div class="check-grid">
+      {% for s in symptoms.values() if s.area == key %}
+      <label class="choice"><input type="checkbox" name="s" value="{{ s.key }}" {{ 'checked' if s.key in picked }}> {{ _(s.label_en, s.label_ar) }}</label>
+      {% endfor %}
+    </div>
+  </fieldset>
+  {% endfor %}
+  <fieldset><legend>{{ _('About the person', 'عن الشخص') }}</legend>
+    <div class="check-grid">
+      <label class="choice"><input type="checkbox" name="child" value="1" {{ 'checked' if args.get('child') }}> {{ _('A child under 12', 'طفل أقل من 12 سنة') }}</label>
+      <label class="choice"><input type="checkbox" name="pregnant" value="1" {{ 'checked' if args.get('pregnant') }}> {{ _('Pregnant', 'حامل') }}</label>
+      <label class="choice"><input type="checkbox" name="breastfeeding" value="1" {{ 'checked' if args.get('breastfeeding') }}> {{ _('Breastfeeding', 'بترضع') }}</label>
+    </div>
+    {% if not user %}<small class="muted">{{ _('Log in and save your conditions, allergies and medicines to get warnings for them too.', 'سجل الدخول واحفظ أمراضك وحساسيتك وأدويتك علشان يظهرلك تحذير ليهم كمان.') }}</small>{% endif %}
+  </fieldset>
+  <details class="red-flags" {{ 'open' if flags }}>
+    <summary>{{ icon('alert') }} {{ _('Do you also have any of these? (danger signs)', 'عندك كمان حاجة من دول؟ (علامات خطر)') }}</summary>
+    <div class="check-grid">
+      {% for f in red_flags.values() %}
+      <label class="choice danger"><input type="checkbox" name="rf" value="{{ f.key }}" {{ 'checked' if f in flags }}> {{ _(f.label_en, f.label_ar) }}</label>
+      {% endfor %}
+    </div>
+  </details>
+  <button class="btn" type="submit">{{ icon('search') }}<span>{{ _('Show what could help', 'اعرض اللي ممكن يساعد') }}</span></button>
+</form>
+
+{% if asked and not flags %}
+<section aria-labelledby="h-res">
+  <h2 class="section-title" id="h-res">{{ icon('pill') }}{{ _('Active ingredients used for these symptoms', 'مواد فعالة بتُستخدم للأعراض دي') }}</h2>
+  {% if results %}
+  <ul class="rows">
+    {% for r in results %}
+    <li class="row symptom-result {{ 'has-warning' if r.warnings }}">
+      <div class="row-head">
+        <span class="row-name" dir="ltr">{{ display_name(r.ingredient) }}</span>
+        <span class="row-meta">
+          {% if r.otc %}<span class="badge ok">{{ _('Sold without a prescription', 'بيتصرف من غير روشتة') }}</span>
+          {% else %}<span class="badge">{{ _('Usually needs a prescription', 'غالباً محتاج روشتة') }}</span>{% endif %}
+          <span class="muted">{{ _('for:', 'لـ:') }} {% for s in r.symptoms %}{{ _(s.label_en, s.label_ar) }}{{ '، ' if lang == 'ar' and not loop.last else (', ' if not loop.last) }}{% endfor %}</span>
+        </span>
+      </div>
+      {% for kind, info in r.warnings %}
+      <p class="sym-warn">{{ icon('alert') }}
+        {% if kind == 'condition' %}{{ _('Listed among the contraindications or cautions for', 'مذكورة ضمن الموانع أو التحذيرات لـ') }} <b>{{ _(info.en, info.ar) }}</b>
+        {% elif kind == 'pregnancy' %}{{ _('Listed among the contraindications or cautions in pregnancy.', 'مذكورة ضمن الموانع أو التحذيرات في الحمل.') }}
+        {% elif kind == 'breastfeeding' %}{{ _('Listed among the contraindications or cautions while breastfeeding.', 'مذكورة ضمن الموانع أو التحذيرات في الرضاعة.') }}
+        {% elif kind == 'allergy' %}{{ _('This is on your allergy list.', 'دي مسجلة في قائمة الحساسية عندك.') }}
+        {% elif kind == 'interaction' %}{{ _('May interact with a medicine you saved:', 'ممكن تتداخل مع دواء محفوظ عندك:') }} <span dir="ltr">{{ info.trade_name }}</span>
+        {% elif kind == 'child' %}{{ _('The U.S. leaflet does not establish use in children', 'النشرة الأمريكية مش مثبتة الاستخدام للأطفال') }}{% if info.min_age_months %} {{ _('under %s months', 'تحت %s شهر') | format(info.min_age_months) }}{% endif %}.
+        {% endif %}</p>
+      {% endfor %}
+      <div class="sym-products">
+        {% for d in r.products %}<a class="chip" href="{{ url_for('public.drug', drug_id=d.id) }}"><span dir="ltr">{{ d.trade_name }}</span> · {{ money(d.price) }}</a>{% endfor %}
+        {% if r.product_count > 3 %}<span class="muted">{{ _('and %s more products', 'و%s منتج تاني') | format(r.product_count - 3) }}</span>{% endif %}
+      </div>
+    </li>
+    {% endfor %}
+  </ul>
+  <p class="muted"><small>{{ _('Sources: DrugCentral (what each ingredient is used for), EDA list of medicines without a prescription (January 2026), DDInter and the U.S. leaflets for the warnings. Symptoms you tick are not stored.', 'المصادر: DrugCentral (المادة بتُستخدم لإيه)، وقائمة هيئة الدواء للأدوية اللي بتتصرف من غير روشتة (يناير 2026)، وDDInter والنشرات الأمريكية للتحذيرات. الأعراض اللي بتعلّم عليها مش بتتحفظ.') }}</small></p>
+  {% else %}
+  <p class="none">{{ _('No active ingredient found for these symptoms. Ask your pharmacist.', 'ملقيناش مادة فعالة للأعراض دي. اسأل الصيدلي.') }}</p>
+  {% endif %}
+</section>
+{% endif %}
+{% endblock %}

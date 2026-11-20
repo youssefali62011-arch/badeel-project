@@ -180,3 +180,49 @@ CREATE TABLE IF NOT EXISTS push_subscriptions (
     auth        TEXT NOT NULL,
     created_at  TEXT NOT NULL
 );
+
+-- Look-alike / sound-alike names (ISMP list, and pairs found in the drug list itself).
+CREATE TABLE IF NOT EXISTS lasa_pairs (
+    name_a      TEXT NOT NULL,          -- lower-case name as written in the source
+    name_b      TEXT NOT NULL,
+    source      TEXT NOT NULL,          -- 'ISMP' or 'Badeel'
+    PRIMARY KEY (name_a, name_b, source)
+);
+CREATE INDEX IF NOT EXISTS idx_lasa_b ON lasa_pairs (name_b);
+
+-- Side effects with their frequency in clinical trials (SIDER 4.1).
+CREATE TABLE IF NOT EXISTS ingredient_side_effects (
+    ingredient  TEXT NOT NULL,          -- moiety name
+    effect      TEXT NOT NULL,          -- MedDRA preferred term
+    freq_lower  REAL,                   -- 0..1, NULL when only "reported"
+    freq_upper  REAL,
+    source      TEXT NOT NULL,
+    PRIMARY KEY (ingredient, effect)
+);
+
+-- Ingredient names matched to RxNorm (official name and RxCUI).
+CREATE TABLE IF NOT EXISTS ingredient_rxnorm (
+    ingredient  TEXT PRIMARY KEY,       -- moiety name in Badeel
+    rxcui       TEXT,
+    rx_name     TEXT,                   -- RxNorm ingredient name, NULL when not found
+    checked_at  TEXT NOT NULL
+);
+
+-- Strength splits proposed for combination products, waiting for a pharmacist.
+CREATE TABLE IF NOT EXISTS combo_suggestions (
+    id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    drug_id     INTEGER NOT NULL REFERENCES drugs(id) ON DELETE CASCADE,
+    proposal    TEXT NOT NULL,          -- JSON: [{"ingredient": ..., "value": 875, "unit": "mg"}, ...]
+    evidence    TEXT,                   -- the RxNorm product it was taken from
+    status      TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'approved', 'rejected')),
+    reviewed_by INTEGER REFERENCES users(id) ON DELETE SET NULL,
+    reviewed_at TEXT,
+    created_at  TEXT NOT NULL,
+    UNIQUE (drug_id, proposal)
+);
+
+-- Ingredients of products on the EDA's list of medicines sold without a prescription.
+CREATE TABLE IF NOT EXISTS otc_ingredients (
+    ingredient  TEXT PRIMARY KEY,       -- moiety name
+    source      TEXT NOT NULL
+);

@@ -10,6 +10,7 @@
   {% if stats.drugs %}
   <p class="hint">{{ _('%s products and %s active ingredients in the database. Spelling mistakes are fine.', 'في قاعدة البيانات %s دواء و%s مادة فعالة. البحث يتحمل الأخطاء الإملائية.') | format(stats.drugs, stats.ingredients) }}</p>
   {% endif %}
+  <p class="hint"><a class="chip" href="{{ url_for('public.symptom_explorer') }}">{{ icon('activity') }}{{ _('Not sure what to ask for? Start from your symptoms', 'مش عارف تسأل على إيه؟ ابدأ من الأعراض') }}</a></p>
 </section>
 
 {% if not stats.drugs %}

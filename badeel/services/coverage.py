@@ -13,7 +13,7 @@ def _pct(part, whole):
 
 
 def report():
-    drugs = db.query("SELECT id, ingredient_key FROM drugs")
+    drugs = db.query("SELECT id, trade_name, ingredient_key FROM drugs")
     moieties = {moiety_key(n) for d in drugs for n in d["ingredient_key"].split("|") if n}
     in_ddi = {r["m"] for r in db.query(
         "SELECT ingredient_a AS m FROM drug_interactions "
@@ -59,6 +59,29 @@ def report():
         "conditions_loaded": db.get_setting("conditions_loaded"),
         "interactions_loaded": db.get_setting("interactions_loaded"),
         "labels_loaded": db.get_setting("labels_loaded"),
+        **_safety(drugs, moieties, any_in),
+    }
+
+
+def _safety(drugs, moieties, any_in):
+    """Look-alike names, side effects, RxNorm names and OTC ingredients."""
+    from .lasa import brand
+    lasa_names = {r["name_a"] for r in db.query("SELECT DISTINCT name_a FROM lasa_pairs")}
+    se_ing = {r["ingredient"] for r in db.query("SELECT DISTINCT ingredient FROM ingredient_side_effects")}
+    rx = {r["ingredient"]: r["rx_name"] for r in db.query("SELECT ingredient, rx_name FROM ingredient_rxnorm")}
+    otc = {r["ingredient"] for r in db.query("SELECT ingredient FROM otc_ingredients")}
+    se_all = se_ing | {m for m, n in rx.items() if n and moiety_key(n) in se_ing}
+    combos = {r["status"]: r["n"] for r in db.query("SELECT status, COUNT(*) AS n FROM combo_suggestions GROUP BY status")}
+    return {
+        "lasa_pairs_ismp": db.one("SELECT COUNT(*) AS n FROM lasa_pairs WHERE source = 'ISMP'")["n"] // 2,
+        "lasa_pairs_local": db.one("SELECT COUNT(*) AS n FROM lasa_pairs WHERE source = 'Badeel'")["n"] // 2,
+        "products_with_lasa": sum(brand(d["trade_name"]) in lasa_names or any_in(d, lasa_names) for d in drugs),
+        "side_effect_rows": db.one("SELECT COUNT(*) AS n FROM ingredient_side_effects")["n"],
+        "products_with_side_effects": sum(any_in(d, se_all) for d in drugs),
+        "rxnorm_checked": len(rx), "rxnorm_found": sum(1 for n in rx.values() if n),
+        "ingredients": len(moieties),
+        "otc_ingredients": len(otc), "products_otc": sum(any_in(d, otc) for d in drugs),
+        "combos": combos,
     }
 
 
@@ -89,6 +112,23 @@ def as_text(r):
         f"  Products with a known use           : {_pct(r['products_with_indication'], r['products'])}",
         f"  Products with a contraindication    : {_pct(r['products_with_contraindication'], r['products'])}",
     ]
+    if "side_effect_rows" in r:
+        c = r["combos"]
+        tail += [
+            "",
+            "Safety data",
+            f"  Look-alike pairs (ISMP list)        : {r['lasa_pairs_ismp']:,}",
+            f"  Look-alike Egyptian brand pairs     : {r['lasa_pairs_local']:,}",
+            f"  Products with a look-alike warning  : {_pct(r['products_with_lasa'], r['products'])}",
+            f"  SIDER side-effect rows              : {r['side_effect_rows']:,}",
+            f"  Products with side effects          : {_pct(r['products_with_side_effects'], r['products'])}",
+            f"  Ingredients checked in RxNorm       : {_pct(r['rxnorm_checked'], r['ingredients'])}",
+            f"  Ingredients found in RxNorm         : {_pct(r['rxnorm_found'], r['ingredients'])}",
+            f"  Ingredients on the EDA OTC list     : {r['otc_ingredients']:,}",
+            f"  Products sold without prescription  : {_pct(r['products_otc'], r['products'])}",
+            f"  Combination strengths proposed      : {sum(c.values()):,} "
+            f"(approved {c.get('approved', 0):,}, rejected {c.get('rejected', 0):,}, waiting {c.get('pending', 0):,})",
+        ]
     for note, n in sorted(r["pediatric_notes"].items()):
         lines.append(f"    {note:<32}  : {n:,}")
     return "\n".join(lines + tail)

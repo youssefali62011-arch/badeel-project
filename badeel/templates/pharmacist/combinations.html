@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% from "_icons.html" import icon %}
+{% block title %}{{ _('Combination strengths', 'تركيزات الأدوية المركبة') }}{% endblock %}
+{% block content %}
+<header class="dash-head"><div>
+  <h1>{{ _('Combination strengths to review', 'تركيزات أدوية مركبة محتاجة مراجعة') }}</h1>
+  <p>{{ _('These products show only a total strength, so they cannot get exact alternatives. RxNorm has a product with the same ingredients and form whose strengths add up to that total. Approve only if you are sure.', 'الأدوية دي مكتوب عليها تركيز إجمالي بس، فمينفعش يكون ليها بدائل مطابقة. RxNorm فيه دوا بنفس المواد والشكل تركيزاته بتجمع نفس الرقم. وافق بس لو متأكد.') }}</p>
+</div></header>
+<p class="muted">{{ _('Approved: %s · Rejected: %s · Waiting: %s', 'اتوافق: %s · اترفض: %s · مستني: %s') | format(done.approved or 0, done.rejected or 0, done.pending or 0) }}</p>
+{% if items %}
+<div class="table-scroll"><table class="table">
+  <thead><tr><th>{{ _('Product', 'الدواء') }}</th><th>{{ _('Proposed strengths', 'التركيزات المقترحة') }}</th><th>{{ _('From RxNorm', 'من RxNorm') }}</th><th></th></tr></thead>
+  <tbody>
+  {% for it in items %}
+    <tr>
+      <td><a href="{{ url_for('public.drug', drug_id=it.s.drug_id) }}" dir="ltr">{{ it.s.trade_name }}</a><br><small class="muted" dir="ltr">{{ it.s.ingredients_display }}</small></td>
+      <td dir="ltr">{% for p in it.parts %}{{ p.ingredient }} <b>{{ '%g' | format(p.value) }} {{ p.unit }}</b>{{ ' + ' if not loop.last }}{% endfor %}</td>
+      <td dir="ltr"><small>{{ it.s.evidence }}</small></td>
+      <td class="actions">
+        <form method="post" action="{{ url_for('pharmacist.review_combination', suggestion_id=it.s.id) }}">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <button class="chip" name="decision" value="approve" type="submit">{{ icon('check') }} {{ _('Approve', 'موافق') }}</button>
+          <button class="chip danger" name="decision" value="reject" type="submit">{{ _('Reject', 'رفض') }}</button>
+        </form>
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table></div>
+{% else %}
+<p class="none">{{ _('Nothing waiting for review.', 'مفيش حاجة مستنية مراجعة.') }}</p>
+{% endif %}
+{% endblock %}

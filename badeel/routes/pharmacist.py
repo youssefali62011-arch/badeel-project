@@ -56,3 +56,33 @@ def update_status(drug_id):
     db.commit()
     flash(tr("Availability and price updated.", "تم تحديث التوافر والسعر."), "success")
     return redirect(url_for("public.drug", drug_id=drug_id))
+
+
+@bp.route("/pharmacist/combinations")
+@security.role_required("pharmacist", "admin")
+def combinations():
+    """Strength splits proposed from RxNorm for combination products: approve or reject."""
+    import json
+    rows = db.query("SELECT s.*, d.trade_name, d.trade_name_ar, d.ingredients_display, d.form FROM combo_suggestions s "
+                    "JOIN drugs d ON d.id = s.drug_id WHERE s.status = 'pending' ORDER BY d.trade_name LIMIT 200")
+    items = [{"s": r, "parts": json.loads(r["proposal"])} for r in rows]
+    done = db.one("SELECT SUM(status = 'approved') AS approved, SUM(status = 'rejected') AS rejected, "
+                  "SUM(status = 'pending') AS pending FROM combo_suggestions")
+    return render_template("pharmacist/combinations.html", items=items, done=done)
+
+
+@bp.route("/pharmacist/combinations/<int:suggestion_id>", methods=["POST"])
+@security.role_required("pharmacist", "admin")
+def review_combination(suggestion_id):
+    from ..services import rxnorm
+    if request.form.get("decision") == "approve":
+        ok = rxnorm.approve(suggestion_id, g.user["id"])
+        security.audit("combination_approved", f"suggestion {suggestion_id}")
+        flash(tr("Strengths saved: the product can now get exact alternatives.",
+                 "اتحفظت التركيزات: الدواء بقى ممكن يكون له بدائل مطابقة.") if ok else
+              tr("This proposal no longer fits the product.", "الاقتراح ده مبقاش مناسب للدواء."), "success" if ok else "error")
+    else:
+        rxnorm.reject(suggestion_id, g.user["id"])
+        security.audit("combination_rejected", f"suggestion {suggestion_id}")
+    db.commit()
+    return redirect(url_for("pharmacist.combinations"))
