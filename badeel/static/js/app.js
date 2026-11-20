@@ -1,25 +1,55 @@
 // Badeel front-end script. No libraries. The site works without it too;
-// it only adds: the light/dark toggle, closing menus, search suggestions and confirm dialogs.
+// it only adds: display settings, closing menus, search suggestions and confirm dialogs.
 (function () {
   "use strict";
 
-  // ---- light / dark mode (the choice is remembered in this browser)
+  // ---- display settings: colours, text size, simple / clinical view, senior mode
   var root = document.documentElement;
-  var themeButton = document.querySelector(".theme-toggle");
-  function currentTheme() {
-    var set = root.getAttribute("data-theme");
-    if (set) { return set; }
-    return window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
-  }
-  if (themeButton) {
-    themeButton.setAttribute("aria-pressed", currentTheme() === "light" ? "true" : "false");
-    themeButton.addEventListener("click", function () {
-      var next = currentTheme() === "light" ? "dark" : "light";
-      root.setAttribute("data-theme", next);
-      themeButton.setAttribute("aria-pressed", next === "light" ? "true" : "false");
-      try { window.localStorage.setItem("badeel-theme", next); } catch (e) { /* storage blocked */ }
+  var SIZES = ["sm", "md", "lg", "xl", "xxl"];
+  function save(key, value) { try { window.localStorage.setItem(key, value); } catch (e) { /* blocked */ } }
+  function get(name, fallback) { return root.getAttribute(name) || fallback; }
+  function set(name, value, key) { root.setAttribute(name, value); save(key, value); refresh(); }
+
+  function refresh() {
+    var senior = get("data-senior", "off") === "on";
+    document.querySelectorAll("[data-set-theme]").forEach(function (b) {
+      b.setAttribute("aria-pressed", String(b.getAttribute("data-set-theme") === get("data-theme", "light")));
     });
+    document.querySelectorAll("[data-set-view]").forEach(function (b) {
+      b.setAttribute("aria-pressed", String(b.getAttribute("data-set-view") === get("data-view", "simple")));
+    });
+    document.querySelectorAll("[data-senior-toggle]").forEach(function (b) {
+      b.setAttribute("aria-pressed", String(senior));
+    });
+    // in the clinical view, open the detail panels marked data-open-in-pro
+    var pro = get("data-view", "simple") === "pro";
+    document.querySelectorAll("details[data-open-in-pro]").forEach(function (d) { d.open = pro; });
   }
+
+  document.addEventListener("click", function (event) {
+    var b = event.target.closest("button");
+    if (!b) { return; }
+    if (b.hasAttribute("data-set-theme")) { set("data-theme", b.getAttribute("data-set-theme"), "badeel-theme"); }
+    else if (b.hasAttribute("data-set-view")) { set("data-view", b.getAttribute("data-set-view"), "badeel-view"); }
+    else if (b.hasAttribute("data-set-text")) { set("data-text", b.getAttribute("data-set-text"), "badeel-text"); }
+    else if (b.hasAttribute("data-text-step")) {
+      var i = SIZES.indexOf(get("data-text", "md"));
+      var next = SIZES[Math.max(0, Math.min(SIZES.length - 1, i + Number(b.getAttribute("data-text-step"))))];
+      set("data-text", next, "badeel-text");
+    } else if (b.hasAttribute("data-senior-toggle")) {
+      // senior mode = simple view + text 125%; turning it off goes back to the defaults
+      if (get("data-senior", "off") === "on") {
+        root.removeAttribute("data-senior"); save("badeel-senior", "off");
+        set("data-text", "md", "badeel-text");
+        set("data-view", root.getAttribute("data-default-view") || "simple", "badeel-view");
+      } else {
+        root.setAttribute("data-senior", "on"); save("badeel-senior", "on");
+        set("data-text", "xl", "badeel-text");
+        set("data-view", "simple", "badeel-view");
+      }
+    }
+  });
+  refresh();
 
   // ---- dropdown menus (<details>): close on outside click, Escape, or opening another
   var dropdowns = document.querySelectorAll("details.dropdown");

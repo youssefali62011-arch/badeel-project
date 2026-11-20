@@ -42,53 +42,7 @@
   color-scheme: dark;
 }
 
-/* Light theme: chosen by the toggle, or by the system when nothing was chosen. */
-:root[data-theme="light"] {
-  --bg: #f3f6fc;
-  --bg-2: #e9eef8;
-  --surface: rgba(255, 255, 255, .78);
-  --surface-2: rgba(255, 255, 255, .92);
-  --solid: #ffffff;
-  --line: rgba(15, 23, 42, .10);
-  --line-strong: rgba(15, 23, 42, .22);
-  --ink: #0d1424;
-  --muted: #4a5670;
-  --neon: #0aa5a0;
-  --neon-2: #7048e8;
-  --neon-3: #db2777;
-  --on-neon: #ffffff;
-  --grad: linear-gradient(120deg, #0aa5a0 0%, #4f63e8 55%, #8b3fd9 100%);
-  --glow: 0 0 0 1px rgba(10, 165, 160, .30), 0 8px 24px rgba(79, 99, 232, .22);
-  --glow-2: 0 0 18px rgba(112, 72, 232, .22);
-  --match: #047857;
-  --match-bg: #d6f5e8;
-  --differs: #8a5300;
-  --differs-bg: #fff1d1;
-  --danger: #be123c;
-  --danger-bg: #ffe4e9;
-  --shadow: 0 10px 34px rgba(15, 23, 42, .10);
-  --orb-1: rgba(10, 165, 160, .22);
-  --orb-2: rgba(112, 72, 232, .20);
-  --orb-3: rgba(219, 39, 119, .14);
-  --grid-line: rgba(15, 23, 42, .05);
-  color-scheme: light;
-}
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme="dark"]) {
-    --bg: #f3f6fc; --bg-2: #e9eef8; --surface: rgba(255, 255, 255, .78);
-    --surface-2: rgba(255, 255, 255, .92); --solid: #ffffff;
-    --line: rgba(15, 23, 42, .10); --line-strong: rgba(15, 23, 42, .22);
-    --ink: #0d1424; --muted: #4a5670; --neon: #0aa5a0; --neon-2: #7048e8; --neon-3: #db2777;
-    --on-neon: #ffffff; --grad: linear-gradient(120deg, #0aa5a0 0%, #4f63e8 55%, #8b3fd9 100%);
-    --glow: 0 0 0 1px rgba(10, 165, 160, .30), 0 8px 24px rgba(79, 99, 232, .22);
-    --glow-2: 0 0 18px rgba(112, 72, 232, .22);
-    --match: #047857; --match-bg: #d6f5e8; --differs: #8a5300; --differs-bg: #fff1d1;
-    --danger: #be123c; --danger-bg: #ffe4e9; --shadow: 0 10px 34px rgba(15, 23, 42, .10);
-    --orb-1: rgba(10, 165, 160, .22); --orb-2: rgba(112, 72, 232, .20); --orb-3: rgba(219, 39, 119, .14);
-    --grid-line: rgba(15, 23, 42, .05);
-    color-scheme: light;
-  }
-}
+/* Colour tokens for light and dark live in theme.css (loaded after this file). */
 
 /* ------------------------------------------------------------ base */
 * { box-sizing: border-box; }
@@ -162,16 +116,6 @@ details[open] > summary .chev { transform: rotate(180deg); }
           cursor: pointer; font: inherit; font-weight: 700; padding: 0; }
 .circle:hover { color: var(--neon); border-color: var(--neon); box-shadow: var(--glow); }
 .circle.lang { font-size: 1rem; }
-/* The theme button appears only when JavaScript runs (it needs it). */
-.theme-toggle { display: none; }
-.js .theme-toggle { display: grid; }
-.theme-toggle .moon { display: none; }
-:root[data-theme="light"] .theme-toggle .sun { display: none; }
-:root[data-theme="light"] .theme-toggle .moon { display: inline; }
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme]) .theme-toggle .sun { display: none; }
-  :root:not([data-theme]) .theme-toggle .moon { display: inline; }
-}
 .avatar { display: grid; place-items: center; width: 2.6rem; height: 2.6rem; border-radius: 50%; cursor: pointer;
           background: var(--grad); color: #fff; font-weight: 800; list-style: none; box-shadow: var(--glow); }
 .avatar::-webkit-details-marker { display: none; }

@@ -1,0 +1,234 @@
+/* =====================================================================
+   Badeel theme: calm medical look for every age.
+   Loaded AFTER style.css. It sets the colour and size tokens, the three
+   display settings, and the page frame. Page components still come from
+   style.css; they read the tokens below, so they change with them.
+
+   Display settings live as attributes on <html> (set by js/theme.js before
+   the page is drawn, from what the visitor chose last time):
+     data-theme  = light (default) | dark
+     data-text   = sm | md (default) | lg | xl | xxl     (A- / A+)
+     data-view   = simple | pro                          (patient / clinical)
+     data-senior = on                                    (simple + text 125%)
+   Without JavaScript the page uses light, md, and the view the server picks
+   for the role (visitors and patients: simple; pharmacists and admins: pro).
+   ===================================================================== */
+
+/* ------------------------------------------------------------ tokens: light (default) */
+:root {
+  /* surfaces */
+  --bg: #F8FAFC;            /* off-white page, easy on the eyes */
+  --surface: #FFFFFF;       /* cards */
+  --surface-2: #F1F5F9;     /* table headers, strips */
+  --solid: #FFFFFF;         /* menus */
+  --line: #CBD5E1;
+  --line-strong: #94A3B8;
+  /* text: both pass WCAG AAA (7:1) on --surface and --bg */
+  --ink: #0F172A;
+  --muted: #475569;
+  /* medical blue: links, primary buttons, focus */
+  --brand: #0F4C81;
+  --brand-hover: #0B3A63;
+  --brand-soft: #E6EEF6;
+  --on-brand: #FFFFFF;
+  /* meaning colours: always paired with an icon and a word, never colour alone */
+  --safe: #15803D;          /* exact alternative, available */
+  --safe-soft: #DCFCE7;
+  --warn: #92400E;          /* different strength or form: ask the pharmacist */
+  --warn-line: #D97706;
+  --warn-soft: #FEF3C7;
+  --danger: #B91C1C;        /* interaction, condition, allergy, shortage */
+  --danger-soft: #FEE2E2;
+
+  --focus: 0 0 0 3px var(--surface), 0 0 0 6px var(--brand);
+  --shadow: 0 1px 2px rgba(15, 23, 42, .06), 0 4px 14px rgba(15, 23, 42, .06);
+  --radius: 12px;
+  --radius-sm: 8px;
+  --text-scale: 1;
+  --tap: 3rem;              /* 48 px touch targets at normal size */
+  --font: "Segoe UI", "Noto Sans Arabic", "Noto Sans", "Helvetica Neue", Tahoma, Arial, sans-serif;
+  color-scheme: light;
+
+  /* names used by style.css, mapped to the calm palette */
+  --neon: var(--brand);  --neon-2: var(--brand);  --neon-3: var(--brand);
+  --on-neon: var(--on-brand);
+  --grad: var(--brand);
+  --glow: 0 0 0 0 transparent;  --glow-2: 0 0 0 0 transparent;
+  --match: var(--safe);  --match-bg: var(--safe-soft);
+  --differs: var(--warn);  --differs-bg: var(--warn-soft);
+  --danger-bg: var(--danger-soft);
+  --orb-1: transparent;  --orb-2: transparent;  --orb-3: transparent;  --grid-line: transparent;
+}
+
+/* ------------------------------------------------------------ tokens: dark (only when chosen) */
+:root[data-theme="dark"] {
+  --bg: #0B1220;
+  --surface: #111A2B;
+  --surface-2: #18233A;
+  --solid: #111A2B;
+  --line: #2A3A55;
+  --line-strong: #3E5378;
+  --ink: #E8EDF5;
+  --muted: #A8B3C7;
+  --brand: #7DB3E8;
+  --brand-hover: #A6CBF1;
+  --brand-soft: #16314F;
+  --on-brand: #0B1220;
+  --safe: #4ADE80;
+  --safe-soft: #0F2E1C;
+  --warn: #FBBF24;
+  --warn-line: #F59E0B;
+  --warn-soft: #33260A;
+  --danger: #F87171;
+  --danger-soft: #3A1414;
+  --shadow: 0 1px 2px rgba(0, 0, 0, .4);
+  color-scheme: dark;
+}
+
+/* ------------------------------------------------------------ text size (A- / A+) */
+:root[data-text="sm"]  { --text-scale: .9; }
+:root[data-text="lg"]  { --text-scale: 1.125; }
+:root[data-text="xl"]  { --text-scale: 1.25; }
+:root[data-text="xxl"] { --text-scale: 1.5; }
+/* everything in style.css is in rem, so text, buttons and spacing grow together */
+html { font-size: calc(106.25% * var(--text-scale)); }          /* 17 px at normal size */
+
+/* ------------------------------------------------------------ senior mode */
+:root[data-senior="on"] { --tap: 3.25rem; --line: #94A3B8; }
+:root[data-senior="on"] body { line-height: 1.85; }
+:root[data-senior="on"] main a:not(.btn) { text-decoration: underline; text-underline-offset: 4px; }
+:root[data-senior="on"] .btn, :root[data-senior="on"] .circle { font-weight: 800; }
+
+/* ------------------------------------------------------------ simple and pro views */
+/* Templates mark details for professionals with .pro-only and the plain
+   summary for patients with .simple-only. */
+:root[data-view="simple"] .pro-only { display: none !important; }
+:root[data-view="pro"] .simple-only { display: none !important; }
+
+/* ------------------------------------------------------------ base */
+body { background: var(--bg); color: var(--ink); font-family: var(--font); }
+.bg { display: none; }                                   /* no animated background */
+a { color: var(--brand); }
+a:hover { color: var(--brand-hover); }
+:focus-visible { outline: none; box-shadow: var(--focus); border-radius: var(--radius-sm); }
+::selection { background: var(--brand); color: var(--on-brand); }
+h1, h2, h3 { color: var(--ink); letter-spacing: 0; }
+.grad-text { background: none; color: var(--brand); -webkit-text-fill-color: currentColor; animation: none; }
+.muted { color: var(--muted); }
+
+/* ------------------------------------------------------------ top bar */
+.top { position: sticky; top: 0; z-index: 30; background: var(--surface); border-bottom: 1px solid var(--line);
+       box-shadow: var(--shadow); -webkit-backdrop-filter: none; backdrop-filter: none; }
+.top-in { gap: .6rem 1rem; padding-block: .6rem; flex-wrap: wrap; }
+.nav-link, .btn, .senior-toggle, .circle { white-space: nowrap; }
+/* bigger text: the links move to their own row instead of squeezing */
+:root[data-text="lg"] .nav, :root[data-text="xl"] .nav, :root[data-text="xxl"] .nav { order: 3; width: 100%; }
+.brand { color: var(--ink); }
+.brand-icon { background: var(--brand); box-shadow: none; animation: none; color: var(--on-brand); }
+.nav-link { color: var(--ink); font-weight: 600; min-height: 2.75rem; border-radius: var(--radius-sm); }
+.nav-link:hover { background: var(--surface-2); border-color: transparent; color: var(--brand); }
+.nav-link[aria-current] { background: var(--brand-soft); border-color: transparent; box-shadow: inset 0 -3px 0 var(--brand); color: var(--brand); }
+
+/* buttons: solid and calm, at least 48 px high */
+.btn { background: var(--brand); color: var(--on-brand); box-shadow: none; border-radius: var(--radius-sm);
+       min-height: var(--tap); padding-inline: 1.2rem; animation: none; }
+.btn:hover { background: var(--brand-hover); color: var(--on-brand); transform: none; box-shadow: none; }
+.btn.ghost { background: var(--surface); color: var(--brand); border: 2px solid var(--brand); }
+.btn.ghost:hover { background: var(--brand-soft); color: var(--brand); box-shadow: none; }
+.circle { width: var(--tap); height: var(--tap); background: var(--surface); border: 1.5px solid var(--line); color: var(--ink); }
+.circle:hover { border-color: var(--brand); color: var(--brand); box-shadow: none; transform: none; }
+.avatar { width: var(--tap); height: var(--tap); background: var(--brand); color: var(--on-brand); box-shadow: none; animation: none; }
+
+/* display controls: A- / A+, senior button, and the "Display" menu */
+.display-tools { display: flex; align-items: center; gap: .4rem; }
+.text-size { display: inline-flex; border: 1.5px solid var(--line); border-radius: var(--radius-sm); overflow: hidden; }
+.text-size button { min-width: var(--tap); min-height: var(--tap); background: var(--surface); color: var(--ink); border: 0;
+                    font: inherit; font-weight: 800; cursor: pointer; }
+.text-size button + button { border-inline-start: 1.5px solid var(--line); }
+.text-size button:hover { background: var(--brand-soft); color: var(--brand); }
+.senior-toggle { display: inline-flex; align-items: center; gap: .45rem; min-height: var(--tap); padding-inline: .9rem;
+                 border-radius: var(--radius-sm); border: 2px solid var(--brand); background: var(--surface);
+                 color: var(--brand); font: inherit; font-weight: 700; cursor: pointer; }
+.senior-toggle[aria-pressed="true"] { background: var(--brand); color: var(--on-brand); }
+.display-menu { min-width: 19rem; padding: .9rem; gap: .9rem; background: var(--solid); box-shadow: var(--shadow); border: 1px solid var(--line-strong); }
+.setting { display: grid; gap: .4rem; }
+.setting-label { font-weight: 700; font-size: .9rem; color: var(--muted); }
+.segmented { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; border: 1.5px solid var(--line); border-radius: var(--radius-sm); overflow: hidden; }
+.segmented button { min-height: var(--tap); background: var(--surface); color: var(--ink); border: 0; font: inherit; font-weight: 600; cursor: pointer;
+                    display: inline-flex; align-items: center; justify-content: center; gap: .4rem; padding-inline: .5rem; }
+.segmented button + button { border-inline-start: 1.5px solid var(--line); }
+.segmented button[aria-pressed="true"] { background: var(--brand); color: var(--on-brand); }
+.setting small { color: var(--muted); }
+/* the controls need JavaScript; without it they are hidden and the defaults apply */
+.needs-js { display: none !important; }
+.js .needs-js { display: inherit !important; }
+.js .display-tools.needs-js, .js .text-size.needs-js { display: flex !important; }
+
+/* menus */
+.menu { background: var(--solid); border: 1px solid var(--line-strong); box-shadow: var(--shadow); animation: none; }
+.menu a, .menu-btn { color: var(--ink); min-height: 2.75rem; }
+.menu a:hover, .menu-btn:hover { background: var(--brand-soft); color: var(--brand); }
+
+/* ------------------------------------------------------------ cards, alerts, badges */
+.card, .panel, .row, .stat, .pair-item, .two > section, .who-list > div, .facts div, .table, .strip, .empty, .none, .flash, .alert {
+  -webkit-backdrop-filter: none; backdrop-filter: none; box-shadow: var(--shadow);
+}
+.row:hover, a.stat:hover, .quick a:hover, .pair-item:hover, .who-list > div:hover { transform: none; box-shadow: var(--shadow); border-color: var(--brand); }
+.stat::after { display: none; }
+.stat-ic { background: var(--brand-soft); color: var(--brand); border: 0; }
+.flash, .alert { border-inline-start-width: 6px; font-size: 1rem; }
+.alert.danger { background: var(--danger-soft); border-color: var(--danger); color: var(--ink); }
+.alert.warn { background: var(--warn-soft); border-color: var(--warn-line); color: var(--ink); }
+.alert.ok, .flash-success { background: var(--safe-soft); border-color: var(--safe); }
+.badge { font-weight: 700; border: 1px solid var(--line); background: var(--surface-2); }
+.badge.ok, .badge.match { background: var(--safe-soft); color: var(--safe); border-color: var(--safe); }
+.badge.bad { background: var(--danger-soft); color: var(--danger); border-color: var(--danger); }
+.badge.save { background: var(--safe); color: #FFFFFF; border: 0; box-shadow: none; }
+:root[data-theme="dark"] .badge.save { color: #0B1220; }
+.count { background: var(--brand); color: var(--on-brand); }
+.sev-major { background: var(--danger); color: #FFFFFF; box-shadow: none; }
+:root[data-theme="dark"] .sev-major { color: #0B1220; }
+.subnav a[aria-current] { background: var(--brand); color: var(--on-brand); box-shadow: none; }
+.search { border-radius: var(--radius); border: 2px solid var(--brand); box-shadow: var(--shadow); }
+.search:focus-within { box-shadow: var(--focus); }
+.search input, .search input:focus, .search input:focus-visible { border: 0; outline: none; box-shadow: none; background: transparent; }
+.eyebrow { color: var(--brand); background: var(--brand-soft); border-color: transparent; }
+
+/* --- page-wide red warning slot (filled by drug.html in the next phase) --- */
+.alerts-slot:empty { display: none; }
+.risk-banner { display: flex; gap: .9rem; align-items: flex-start; padding: 1.1rem 1.25rem; border-radius: var(--radius);
+               background: var(--danger-soft); border: 2px solid var(--danger); border-inline-start-width: 8px; color: var(--ink);
+               font-size: 1.05rem; margin-bottom: 1.25rem; }
+.risk-banner .ic { color: var(--danger); width: 28px; height: 28px; }
+.risk-banner strong { color: var(--danger); font-size: 1.15rem; }
+
+/* --- colour-coded alternative cards (used by drug.html in the next phase) --- */
+.alt-card { border: 2px solid var(--line); border-inline-start-width: 8px; border-radius: var(--radius); background: var(--surface); padding: 1rem 1.1rem; box-shadow: var(--shadow); }
+.alt-card.is-exact   { border-color: var(--safe); }
+.alt-card.is-related { border-color: var(--warn-line); }
+.alt-card.is-risk    { border-color: var(--danger); }
+.status-pill { display: inline-flex; align-items: center; gap: .35rem; font-weight: 800; font-size: .85rem; padding: .2rem .7rem; border-radius: 999px; }
+.status-pill.exact   { background: var(--safe-soft); color: var(--safe); }
+.status-pill.related { background: var(--warn-soft); color: var(--warn); }
+.status-pill.risk    { background: var(--danger-soft); color: var(--danger); }
+.saving-big { font-size: 1.4rem; font-weight: 800; color: var(--safe); font-variant-numeric: tabular-nums; }
+
+/* ------------------------------------------------------------ footer */
+.foot { background: var(--surface); border-top: 1px solid var(--line); }
+
+/* ------------------------------------------------------------ small screens */
+@media (max-width: 1100px) { .text-size, .senior-label { display: none !important; } }
+@media (max-width: 860px) {
+  .display-tools .senior-toggle { padding-inline: .6rem; }
+}
+
+/* ------------------------------------------------------------ motion: short and optional */
+@media (prefers-reduced-motion: no-preference) {
+  .main > *, .rows > li, .stats > *, .quick > *, .who-list > * { animation: fade .18s ease-out both; animation-delay: 0s !important; }
+  .btn, .circle, .nav-link, .row, .stat { transition: background-color .15s, color .15s, border-color .15s; }
+  .o1, .o2, .o3, .grid, .brand-icon, .avatar, .grad-text { animation: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }

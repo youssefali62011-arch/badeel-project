@@ -1,27 +1,29 @@
 {% from "_icons.html" import icon %}
-<!doctype html>
-<html lang="{{ lang }}" dir="{{ 'rtl' if lang == 'ar' else 'ltr' }}">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="color-scheme" content="dark light">
-  <title>{% block title %}{{ _('Badeel', 'بديل') }}{% endblock %} | {{ _('Medication alternatives', 'بدائل الأدوية') }}</title>
-  <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='favicon.svg') }}">
-  <script src="{{ url_for('static', filename='js/theme.js') }}"></script>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-</head>
-{%- set ep = request.endpoint or '' %}
 {%- set role = user.role if user else 'visitor' %}
 {%- if role == 'admin' %}{% set home_ep = 'admin.dashboard' %}
 {%- elif role == 'pharmacist' %}{% set home_ep = 'pharmacist.dashboard' %}
 {%- elif role == 'patient' %}{% set home_ep = 'account.dashboard' %}
 {%- else %}{% set home_ep = 'public.home' %}{% endif %}
+{#- Default view without JavaScript: plain for visitors and patients, full detail for professionals.
+    js/theme.js replaces it with what the visitor chose last time. #}
+{%- set default_view = 'pro' if role in ('pharmacist', 'admin') else 'simple' %}
 {%- macro navlink(endpoint, label, ic, also=()) -%}
   {%- set here = request.endpoint or '' %}
   <a class="nav-link" href="{{ url_for(endpoint) }}" {{ 'aria-current=page' if here == endpoint or here in also }}>{{ icon(ic) }}<span>{{ label }}</span></a>
 {%- endmacro %}
+<!doctype html>
+<html lang="{{ lang }}" dir="{{ 'rtl' if lang == 'ar' else 'ltr' }}" data-view="{{ default_view }}" data-default-view="{{ default_view }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>{% block title %}{{ _('Badeel', 'بديل') }}{% endblock %} | {{ _('Medication alternatives', 'بدائل الأدوية') }}</title>
+  <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='favicon.svg') }}">
+  <script src="{{ url_for('static', filename='js/theme.js') }}"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/theme.css') }}">
+</head>
 <body class="role-{{ role }}">
-<div class="bg" aria-hidden="true"><span class="orb o1"></span><span class="orb o2"></span><span class="orb o3"></span><span class="grid"></span></div>
 <a class="skip" href="#main">{{ _('Skip to content', 'انتقل إلى المحتوى') }}</a>
 
 <header class="top">
@@ -50,6 +52,7 @@
         <div class="menu">
           {% if role == 'admin' %}
             <a href="{{ url_for('admin.import_data') }}">{{ icon('upload') }}{{ _('Import data', 'استيراد البيانات') }}</a>
+            <a href="{{ url_for('admin.drug_new') }}">{{ icon('plus') }}{{ _('Add drug', 'إضافة دواء') }}</a>
             <a href="{{ url_for('admin.security_log') }}">{{ icon('shield') }}{{ _('Security log', 'سجل الأمان') }}</a>
             <a href="{{ url_for('admin.audit_log') }}">{{ icon('log') }}{{ _('Change log', 'سجل التغييرات') }}</a>
             <a href="{{ url_for('pharmacist.dashboard') }}">{{ icon('alert') }}{{ _('Shortages', 'النواقص') }}</a>
@@ -65,27 +68,61 @@
     </nav>
 
     <div class="actions">
+      {# one main action per role; the others are in "More" #}
       {% if role == 'visitor' %}
-        <a class="btn ghost" href="{{ url_for('auth.login') }}">{{ _('Log in', 'دخول') }}</a>
-        <a class="btn" href="{{ url_for('auth.register') }}">{{ icon('spark') }}<span>{{ _('Create account', 'حساب جديد') }}</span></a>
+        <a class="btn ghost hide-sm" href="{{ url_for('auth.login') }}">{{ _('Log in', 'دخول') }}</a>
+        <a class="btn hide-sm" href="{{ url_for('auth.register') }}">{{ _('Create account', 'حساب جديد') }}</a>
       {% elif role == 'admin' %}
-        <a class="btn ghost hide-sm" href="{{ url_for('admin.drug_new') }}">{{ icon('plus') }}<span>{{ _('Add drug', 'إضافة دواء') }}</span></a>
         <a class="btn hide-sm" href="{{ url_for('admin.import_data') }}">{{ icon('upload') }}<span>{{ _('Import data', 'استيراد') }}</span></a>
       {% elif role == 'pharmacist' %}
-        <a class="btn ghost hide-sm" href="{{ url_for('public.home') }}">{{ icon('edit') }}<span>{{ _('Update a product', 'تحديث دواء') }}</span></a>
         <a class="btn hide-sm" href="{{ url_for('pharmacist.dashboard') }}">{{ icon('alert') }}<span>{{ _('Shortages', 'النواقص') }}</span></a>
       {% else %}
-        <a class="btn ghost hide-sm" href="{{ url_for('account.profile') }}">{{ icon('heart') }}<span>{{ _('Health profile', 'ملفي الصحي') }}</span></a>
-        <a class="btn hide-sm" href="{{ url_for('public.home') }}">{{ icon('search') }}<span>{{ _('Find alternatives', 'ابحث عن بديل') }}</span></a>
+        <a class="btn hide-sm" href="{{ url_for('account.profile') }}">{{ icon('heart') }}<span>{{ _('Health profile', 'ملفي الصحي') }}</span></a>
       {% endif %}
+
+      {# ---- display settings: need JavaScript, hidden without it ---- #}
+      <div class="display-tools needs-js">
+        <div class="text-size needs-js" dir="ltr" role="group" aria-label="{{ _('Text size', 'حجم الخط') }}">
+          <button type="button" data-text-step="-1" title="{{ _('Smaller text', 'تصغير الخط') }}" aria-label="{{ _('Smaller text', 'تصغير الخط') }}">A-</button>
+          <button type="button" data-text-step="1" title="{{ _('Larger text', 'تكبير الخط') }}" aria-label="{{ _('Larger text', 'تكبير الخط') }}">A+</button>
+        </div>
+        <button class="senior-toggle" type="button" data-senior-toggle aria-pressed="false"
+                title="{{ _('Large text and a simple page', 'خط كبير وصفحة مبسطة') }}">
+          {{ icon('glasses') }}<span class="senior-label">{{ _('Senior mode', 'وضع كبار السن') }}</span>
+        </button>
+        <details class="dropdown display">
+          <summary class="circle" title="{{ _('Display settings', 'إعدادات العرض') }}" aria-label="{{ _('Display settings', 'إعدادات العرض') }}">{{ icon('sliders') }}</summary>
+          <div class="menu end display-menu">
+            <div class="setting">
+              <span class="setting-label" id="lbl-view">{{ _('What to show', 'طريقة العرض') }}</span>
+              <div class="segmented" role="group" aria-labelledby="lbl-view">
+                <button type="button" data-set-view="simple" aria-pressed="false">{{ icon('user') }}{{ _('Simple', 'مبسط') }}</button>
+                <button type="button" data-set-view="pro" aria-pressed="false">{{ icon('stethoscope') }}{{ _('Clinical', 'للصيدلي والطبيب') }}</button>
+              </div>
+              <small>{{ _('Simple: name, price, availability and saving. Clinical: ingredient, strength, form, leaflet and all alternatives.', 'المبسط: الاسم والسعر والتوافر والتوفير. للصيدلي والطبيب: المادة الفعالة والتركيز والشكل والنشرة وكل البدائل.') }}</small>
+            </div>
+            <div class="setting">
+              <span class="setting-label" id="lbl-text">{{ _('Text size', 'حجم الخط') }}</span>
+              <div class="segmented" dir="ltr" role="group" aria-labelledby="lbl-text">
+                <button type="button" data-text-step="-1">A-</button>
+                <button type="button" data-set-text="md">{{ _('Normal', 'عادي') }}</button>
+                <button type="button" data-text-step="1">A+</button>
+              </div>
+            </div>
+            <div class="setting">
+              <span class="setting-label" id="lbl-theme">{{ _('Colours', 'الألوان') }}</span>
+              <div class="segmented theme-toggle" role="group" aria-labelledby="lbl-theme">
+                <button type="button" data-set-theme="light" aria-pressed="false">{{ icon('sun') }}{{ _('Light', 'فاتح') }}</button>
+                <button type="button" data-set-theme="dark" aria-pressed="false">{{ icon('moon') }}{{ _('Dark', 'داكن') }}</button>
+              </div>
+            </div>
+          </div>
+        </details>
+      </div>
 
       <a class="circle" href="{{ url_for('public.search') }}" title="{{ _('Search', 'بحث') }}" aria-label="{{ _('Search', 'بحث') }}">{{ icon('search') }}</a>
       <a class="circle lang" href="{{ url_for('public.set_lang', code='en' if lang == 'ar' else 'ar', next=current_path) }}"
          title="{{ 'English' if lang == 'ar' else 'العربية' }}" lang="{{ 'en' if lang == 'ar' else 'ar' }}">{{ 'EN' if lang == 'ar' else 'ع' }}</a>
-      <button class="circle theme-toggle" type="button" title="{{ _('Light or dark mode', 'الوضع الفاتح أو الداكن') }}"
-              aria-label="{{ _('Switch between light and dark mode', 'التبديل بين الوضع الفاتح والداكن') }}">
-        {{ icon('sun', 'sun') }}{{ icon('moon', 'moon') }}
-      </button>
 
       {% if user %}
       <details class="dropdown account">
@@ -117,6 +154,8 @@
 {% endif %}
 
 <main id="main" class="wrap main">
+  {#- Page-wide warnings (interaction, condition, allergy) go here, above everything else. -#}
+  <div class="alerts-slot" role="region" aria-label="{{ _('Warnings', 'تحذيرات') }}">{% block alerts %}{% endblock %}</div>
   {% with messages = get_flashed_messages(with_categories=true) %}
     {% for category, message in messages %}
       <div class="flash flash-{{ category }}" role="status">{{ message }}</div>
