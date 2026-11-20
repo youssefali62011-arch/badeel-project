@@ -23,3 +23,15 @@ DrugCentral diseases (loaded 2026-11-19 22:42:36)
   Ingredients found in DrugCentral    : 1,347 of 6,882 (19.6%)
   Products with a known use           : 18,290 of 22,757 (80.4%)
   Products with a contraindication    : 16,270 of 22,757 (71.5%)
+
+Safety data
+  Look-alike pairs (ISMP list)        : 390
+  Look-alike Egyptian brand pairs     : 502
+  Products named in a look-alike pair : 5,164 of 22,757 (22.7%)
+  SIDER side-effect rows              : 58,414
+  Products with side effects          : 10,459 of 22,757 (46.0%)
+  Ingredients checked in RxNorm       : 6,880 of 6,882 (100.0%)
+  Ingredients found in RxNorm         : 2,976 of 6,882 (43.2%)
+  Ingredients on the EDA OTC list     : 103
+  Products sold without prescription  : 5,776 of 22,757 (25.4%)
+  Combination strengths proposed      : 47 (approved 0, rejected 0, waiting 47)

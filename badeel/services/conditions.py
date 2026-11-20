@@ -126,7 +126,8 @@ def load_drugcentral(paths):
 
 # -------------------------------------------------------------- lookup
 def _moieties(drug):
-    return sorted({moiety_key(n) for n in drug["ingredient_key"].split("|") if n})
+    from .rxnorm import aliases
+    return sorted(aliases({moiety_key(n) for n in drug["ingredient_key"].split("|") if n}))
 
 
 def for_drug(drug):

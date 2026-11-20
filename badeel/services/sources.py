@@ -94,3 +94,33 @@ def fetch_drugcentral(url=None, raw_dir=RAW_DIR, log=print):
     path = download(url, os.path.join(folder, url.rsplit("/", 1)[1]), log)
     _write_source(folder, "DrugCentral", [url], DRUGCENTRAL_LICENCE)
     return [path]
+
+
+def fetch_ismp(raw_dir=RAW_DIR, log=print):
+    """ISMP List of Confused Drug Names (PDF, 2015 edition)."""
+    from .lasa import ISMP_LICENCE, ISMP_URL
+    folder = os.path.join(raw_dir, "ismp")
+    path = download(ISMP_URL, os.path.join(folder, "ismp_confused_drug_names_2015.pdf"), log)
+    _write_source(folder, "ISMP List of Confused Drug Names", [ISMP_URL], ISMP_LICENCE)
+    return path
+
+
+def fetch_sider(raw_dir=RAW_DIR, log=print):
+    """SIDER 4.1 side effects: drug_names.tsv and meddra_freq.tsv.gz. Returns the folder."""
+    from .side_effects import BASE_URL, FILES, LICENCE
+    folder = os.path.join(raw_dir, "sider")
+    urls = [BASE_URL + f for f in FILES]
+    for u in urls:
+        download(u, os.path.join(folder, u.rsplit("/", 1)[1]), log)
+    _write_source(folder, "SIDER 4.1", urls, LICENCE)
+    return folder
+
+
+def fetch_eda_otc(raw_dir=RAW_DIR, log=print):
+    """EDA list of medicines sold without a prescription (PDF, January 2026)."""
+    from .eda import EDA_OTC_URL
+    folder = os.path.join(raw_dir, "eda")
+    path = download(EDA_OTC_URL, os.path.join(folder, "otc-list-5-1-2026.pdf"), log)
+    _write_source(folder, "Egyptian Drug Authority OTC list", [EDA_OTC_URL],
+                  "Egyptian Drug Authority, public document.")
+    return path

@@ -31,6 +31,17 @@
     {% for i in ingredients %}<a href="{{ url_for('public.ingredient', ingredient_id=i.id) }}" dir="ltr">{{ display_name(i.name) }}</a>{% endfor %}
   </p>
 
+  {% if lasa_pairs %}
+  <div class="alert warn lasa" id="lasa">
+    <strong>{{ _('Easy to confuse with another name', 'اسم ممكن يتلخبط مع اسم تاني') }}</strong>
+    {{ _('Check the box with your pharmacist. These names look or sound alike but are different medicines:', 'راجع العلبة مع الصيدلي. الأسماء دي شكلها أو نطقها قريب لكن أدوية مختلفة:') }}
+    <ul class="interaction-list">
+      {% for p in lasa_pairs %}<li><span dir="ltr"><b>{{ p.mine }}</b> ↔ {% if p.drug_id %}<a href="{{ url_for('public.drug', drug_id=p.drug_id) }}">{{ p.other }}</a>{% else %}{{ p.other }}{% endif %}</span>
+        <small class="muted">{{ _('ISMP list of confused names', 'قائمة ISMP للأسماء المتشابهة') if p.source == 'ISMP' else _('Similar Egyptian brand, found by Badeel', 'اسم تجاري مصري قريب، بديل لقاه') }}</small></li>{% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+
   {% if allergy_hits %}
   <div class="alert danger" role="alert">
     <strong>{{ _('Allergy warning', 'تحذير حساسية') }}</strong>
@@ -111,6 +122,19 @@
     </details>
     {% endif %}
     <p class="muted"><small>{{ _('Source: DrugCentral, for the active ingredient (not for this brand). Log in and tick your conditions in your account to be warned.', 'المصدر: DrugCentral، للمادة الفعالة (مش للماركة دي بالذات). سجل الدخول وعلّم على أمراضك في حسابك علشان يظهرلك تحذير.') }}</small></p>
+  </section>
+  {% endif %}
+
+  {% if side_effects %}
+  <section class="block" aria-labelledby="h-side">
+    <h2 id="h-side">{{ _('Common side effects', 'أعراض جانبية شائعة') }}</h2>
+    {% if side_effects | selectattr('drowsy') | list %}
+    <p class="alert warn">{{ _('May cause drowsiness or dizziness. Be careful when driving or using machines.', 'ممكن يسبب نعاس أو دوخة. خلي بالك وانت سايق أو بتشغل مكن.') }}</p>
+    {% endif %}
+    <ul class="side-list">
+      {% for e in side_effects %}<li><span>{% if e.ar and lang == 'ar' %}{{ e.ar }} <small class="muted" dir="ltr">{{ e.effect }}</small>{% else %}<span dir="ltr">{{ e.effect }}</span>{% endif %}</span><b dir="ltr">{{ e.percent }}</b></li>{% endfor %}
+    </ul>
+    <p class="muted"><small>{{ _('Highest rate reported in the clinical trials of the U.S. leaflet, for the active ingredient. Source: SIDER 4.1 (CC BY-SA 4.0).', 'أعلى نسبة اتسجلت في التجارب الإكلينيكية في النشرة الأمريكية، للمادة الفعالة. المصدر: SIDER 4.1 (CC BY-SA 4.0).') }}</small></p>
   </section>
   {% endif %}
 

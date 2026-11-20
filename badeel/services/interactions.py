@@ -89,7 +89,8 @@ def between(moieties_1, moieties_2):
 
 
 def drug_moieties(drug):
-    return {moiety_key(n) for n in drug["ingredient_key"].split("|") if n}
+    from .rxnorm import aliases                 # RxNorm names match the U.S. names in DDInter
+    return aliases({moiety_key(n) for n in drug["ingredient_key"].split("|") if n})
 
 
 def with_saved_medicines(drug, user_id):
