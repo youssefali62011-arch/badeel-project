@@ -2,3 +2,4 @@ Flask>=3.0
 scikit-learn>=1.4
 cryptography>=42
 pywebpush>=2.0   # medicine reminders (Web Push); the site works without it
+gunicorn>=22.0; platform_system != "Windows"   # the web server on Render (Linux only)
