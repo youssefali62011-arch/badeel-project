@@ -1,0 +1,33 @@
+# Render Blueprint: one web service with a 1 GB disk for the database and keys.
+# How to use it: deploy/RENDER.md
+services:
+  - type: web
+    name: badeel
+    runtime: python
+    plan: 0.5c-512mb          # $7/month. A disk needs a paid plan: on Free the data is wiped on every restart.
+    region: frankfurt         # the closest region to Egypt
+    buildCommand: pip install -r requirements.txt
+    # First start only: load the Egyptian data, the interactions and the search model,
+    # and create the admin. Every later start skips what is already there.
+    startCommand: python deploy/render_start.py && gunicorn --workers 1 --threads 8 --timeout 120 --bind 0.0.0.0:$PORT "badeel:create_app()"
+    healthCheckPath: /
+    autoDeploy: true          # every merge into main is published automatically
+    disk:
+      name: badeel-data
+      mountPath: /var/data
+      sizeGB: 1
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.8
+      - key: BADEEL_INSTANCE  # database, encryption keys and search model live on the disk
+        value: /var/data/instance
+      - key: BADEEL_HTTPS     # cookies are sent over HTTPS only
+        value: "1"
+      - key: BADEEL_TRUST_PROXY   # Render's load balancer sits in front of the site
+        value: "1"
+      - key: BADEEL_PUBLIC_NOTICE # banner: trial version, not medical advice
+        value: "1"
+      - key: BADEEL_ADMIN_EMAIL   # typed in the Render dashboard, never written in Git
+        sync: false
+      - key: BADEEL_ADMIN_PASSWORD
+        sync: false
