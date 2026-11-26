@@ -1,0 +1,329 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Badeel — Project Plan</title><style>
+@page { size: A4; margin: 16mm 15mm 18mm; }
+* { box-sizing: border-box; }
+body { font-family: Inter, 'DejaVu Sans', sans-serif; color: #0f172a; font-size: 10.2pt; line-height: 1.5; margin: 0; }
+h1 { font-size: 21pt; margin: 0 0 4mm; letter-spacing: -.02em; }
+h2 { font-size: 15pt; margin: 0 0 3mm; padding-bottom: 2mm; border-bottom: 2px solid #0e7490; color: #0e7490; letter-spacing: -.01em; }
+h3 { break-after: avoid; page-break-after: avoid; font-size: 11.5pt; margin: 5mm 0 2mm; color: #0f172a; }
+p { margin: 0 0 2.5mm; }
+.page { page-break-before: always; }
+.cover { height: 255mm; display: flex; flex-direction: column; justify-content: space-between; padding: 8mm 4mm; }
+.brand { display: flex; align-items: center; gap: 4mm; }
+.logo { width: 16mm; height: 16mm; border-radius: 4mm; background: linear-gradient(135deg,#0e7490,#6366f1); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-size: 20pt; }
+.cover h1 { font-size: 34pt; line-height: 1.1; margin: 0 0 4mm; }
+.cover .sub { font-size: 14pt; color: #475569; max-width: 150mm; }
+.meta { display: grid; grid-template-columns: 45mm 1fr; gap: 2mm 6mm; font-size: 10.5pt; }
+.meta b { color: #64748b; font-weight: 600; }
+.kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 3mm; margin: 4mm 0; }
+.kpi { border: 1px solid #e2e8f0; border-radius: 3mm; padding: 3mm; background: #f8fafc; }
+.kpi .v { font-size: 16pt; font-weight: 800; color: #0e7490; line-height: 1.1; }
+.kpi .l { font-size: 8.5pt; color: #475569; }
+table { width: 100%; border-collapse: collapse; margin: 2mm 0 4mm; font-size: 8.6pt; page-break-inside: auto; }
+th { background: #0f172a; color: #fff; text-align: left; padding: 1.8mm 2mm; font-weight: 600; }
+td { border-bottom: 1px solid #e2e8f0; padding: 1.7mm 2mm; vertical-align: top; }
+tr { page-break-inside: avoid; }
+tbody tr:nth-child(even) td { background: #f8fafc; }
+.pill { display: inline-block; padding: .4mm 2mm; border-radius: 10mm; font-size: 7.6pt; font-weight: 700; white-space: nowrap; }
+.ok { background: #dcfce7; color: #166534; } .rev { background: #dbeafe; color: #1e40af; }
+.todo { background: #f1f5f9; color: #475569; } .str { background: #f3e8ff; color: #6b21a8; } .doing { background: #fef9c3; color: #854d0e; }
+.box { border: 1px solid #e2e8f0; border-left: 4px solid #0e7490; background: #f0f9ff; border-radius: 2mm; padding: 3mm 4mm; margin: 3mm 0; }
+.warn { border-left-color: #b45309; background: #fffbeb; }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 5mm; }
+ul { margin: 0 0 3mm; padding-left: 5mm; } li { margin-bottom: 1mm; }
+.diagram { width: 100%; height: auto; margin: 2mm 0; }
+.gantt { display: grid; font-size: 7.6pt; border: 1px solid #e2e8f0; border-radius: 2mm; overflow: hidden; margin: 3mm 0; }
+.gw { background: #0f172a; color: #fff; text-align: center; padding: 1.2mm 0; font-weight: 600; line-height: 1.2; }
+.gl { padding: 1mm 2mm; border-top: 1px solid #e2e8f0; line-height: 1.2; }
+.gl span { display: block; color: #64748b; font-size: 6.8pt; }
+.gh { background: #0f172a; color: #fff; font-weight: 700; display: flex; align-items: center; }
+.gc { border-top: 1px solid #e2e8f0; border-left: 1px dashed #eef2f7; }
+.g-ai { background: #a5b4fc; } .g-ds { background: #67e8f9; } .g-cy { background: #fda4af; } .g-fs { background: #86efac; }
+.g-pm { background: #fcd34d; } .g-ms { background: #0f172a; } .g-str { background: repeating-linear-gradient(45deg,#e9d5ff 0 4px,#f5f3ff 4px 8px); }
+.legend { display: flex; gap: 4mm; flex-wrap: wrap; font-size: 8pt; color: #475569; }
+.legend i { display: inline-block; width: 4mm; height: 3mm; border-radius: 1mm; vertical-align: -0.3mm; margin-right: 1mm; }
+.small { font-size: 8.5pt; color: #475569; }
+.toc li { margin-bottom: 1.4mm; }
+table.bl th:nth-child(1) { width: 15%; } table.bl th:nth-child(2) { width: 31%; } table.bl th:nth-child(3) { width: 14%; }
+table.bl th:nth-child(4) { width: 17%; } table.bl th:nth-child(5) { width: 13%; } table.bl th:nth-child(6) { width: 10%; }
+table.bl { font-size: 8.2pt; table-layout: fixed; } table.bl td { overflow-wrap: anywhere; }
+code { font-family: 'DejaVu Sans Mono', monospace; font-size: 8.3pt; background: #f1f5f9; padding: 0 1mm; border-radius: 1mm; }
+</style></head><body>
+
+<section class="cover">
+  <div class="brand"><div class="logo">B</div><div><b style="font-size:13pt">Badeel</b><br><span class="small">Graduation project · Egyptian Chinese University</span></div></div>
+  <div>
+    <h1>Project Plan<br>and Milestones</h1>
+    <p class="sub">A secure, bilingual system that finds exact medicine alternatives on the Egyptian market and warns each patient about the risks that apply to them.</p>
+    <div class="kpis">
+      <div class="kpi"><div class="v">22,757</div><div class="l">Egyptian products, cleaned and linked</div></div>
+      <div class="kpi"><div class="v">93.0%</div><div class="l">top-1 search accuracy with spelling mistakes (CV)</div></div>
+      <div class="kpi"><div class="v">8</div><div class="l">open data sources linked</div></div>
+      <div class="kpi"><div class="v">65 / 65</div><div class="l">simulated attacks blocked</div></div>
+    </div>
+  </div>
+  <div class="meta">
+    <b>Supervisor</b><span>Dr. Amira</span>
+    <b>Teaching assistant</b><span>Eng. Toqa Hamdy</span>
+    <b>Team</b><span>Youssef Ali · Mohamed Ashraf · Bahaa · Abdelrahman · Mohamed Ali · Mohamed Adel · Ziad · Mahmoud Eid · Ahmed Taha · Youssef Awad</span>
+    <b>Repository</b><span>github.com/youssefali62011-arch/badeel-project</span>
+    <b>Version</b><span>1.0 — 26 November 2026. Status data taken from the repository on this date.</span>
+  </div>
+</section>
+
+<section class="page">
+<h2>Contents</h2>
+<ol class="toc">
+<li>Executive summary</li><li>The project: problem, objectives, contributions</li><li>System architecture</li>
+<li>Where we are: work completed</li><li>Data sources: what, where from, licence</li>
+<li>Semester 1 — implementation plan (29 Nov 2026 – 14 Jan 2027)</li>
+<li>Evaluation plan: how every claim will be measured</li>
+<li>Semester 2 — experiments, thesis, research paper (Feb – Jun 2027)</li>
+<li>Milestones and acceptance criteria</li><li>Research paper plan</li><li>Risks, ethics and law</li><li>Ways of working</li>
+</ol>
+
+<h2 style="margin-top:8mm">1. Executive summary</h2>
+<p>When a medicine is out of stock in Egypt, patients and pharmacists need a product with <b>exactly</b> the same active ingredient, strength and dosage form. Brand names differ, Arabic and English spellings vary, and nothing on the box warns the patient about interactions with their other medicines.</p>
+<p>Badeel already solves the core of this. It holds 22,757 Egyptian products linked to 8 open sources. Its exact-alternative engine and spelling-tolerant search work, with 93.0% top-1 accuracy on 18,000 misspelled queries. Each patient gets warnings for interactions, allergies, conditions and look-alike names. Voice search, photo search, reminders and an installable app are built. An automated attack suite blocks all 65 attacks.</p>
+<p>This plan splits the remaining work into two semesters:</p>
+<ul>
+<li><b>Semester 1 (now – 14 Jan 2027): finish the build.</b> Verify the data with a pharmacist, strengthen the AI search, finish the advanced security features, deploy with HTTPS, then freeze features.</li>
+<li><b>Semester 2 (Feb – Jun 2027): prove it and write it up.</b> Run the experiments (gold set, real queries, user study), write thesis chapters 2–7, submit a research paper, and allow only small fixes.</li>
+</ul>
+<div class="box"><b>The rule for both semesters:</b> every feature ships with a test and a number. Accuracy, speed, coverage and attack rate are measured by a script in the repository, so every table in the thesis and the paper can be regenerated.</div>
+</section>
+
+<section class="page">
+<h2>2. The project</h2>
+<h3>Problem</h3>
+<ul>
+<li>Medicine shortages are frequent in Egypt. Choosing an alternative by hand is slow and error-prone: the same ingredient may come at another strength or form, and salts differ (diclofenac sodium vs potassium).</li>
+<li>Patients search with misspelled names, in Arabic letters for English brands ("اوجمنتين"), or in Franco.</li>
+<li>Safety information is scattered across international databases that do not use Egyptian brand names.</li>
+<li>Health data is sensitive, and Egypt's Personal Data Protection Law (No. 151 of 2020) treats it as sensitive data.</li>
+</ul>
+<h3>Objectives</h3>
+<ol>
+<li>Find exact alternatives (same ingredient, strength, form) with precision ≥ 0.98, verified against a pharmacist-reviewed gold set.</li>
+<li>Find the intended product despite spelling mistakes in Arabic, English and Franco, and from a photo or voice.</li>
+<li>Give each patient warnings that apply to them: interactions, allergies, conditions, pregnancy, look-alike names.</li>
+<li>Protect health data by design: encryption, access control, tamper-evident logs, tested against real attacks.</li>
+<li>Publish a cleaned, linked Egyptian drug dataset as an open benchmark.</li>
+</ol>
+<h3>Expected research contributions</h3>
+<table><thead><tr><th>#</th><th>Contribution</th><th>Evidence planned</th></tr></thead><tbody>
+<tr><td>C1</td><td>An open Egyptian drug dataset linked to RxNorm, DDInter, DrugCentral, openFDA, SIDER and ISMP, with coverage measured per source</td><td>Dataset v2.0 with DOI; coverage tables; EDA cross-check; 100-product audit</td></tr>
+<tr><td>C2</td><td>A normalisation method for exact therapeutic equivalence in a noisy national list (salts, units, per-ml strengths, combination totals)</td><td>500-pair gold set: precision, recall, error analysis</td></tr>
+<tr><td>C3</td><td>Bilingual, misspelling-tolerant drug search with learned ranking</td><td>Logistic regression vs LightGBM vs TF-IDF on synthetic and real queries; photo and voice benchmarks</td></tr>
+<tr><td>C4</td><td>A personalised safety layer and its measured precision</td><td>200 warnings reviewed by a pharmacist; LASA evaluation</td></tr>
+<tr><td>C5</td><td>Security by design for a health web app</td><td>Attack suite, ZAP and Burp results; tamper-evident log; blind index</td></tr>
+</tbody></table>
+</section>
+
+<section class="page">
+<h2>3. System architecture</h2>
+
+<svg viewBox="0 0 900 470" class="diagram" xmlns="http://www.w3.org/2000/svg" font-family="Inter, sans-serif">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#475569"/></marker></defs>
+<rect x="10" y="10" width="880" height="62" rx="10" fill="#eef6ff" stroke="#93c5fd"/>
+<text x="24" y="34" font-size="13" font-weight="700" fill="#1e3a8a">Users</text>
+<text x="24" y="54" font-size="11.5" fill="#334155">Patient · Pharmacist · Admin — browser or installed app (PWA), Arabic RTL / English, dark &amp; light, voice (Web Speech API), camera</text>
+<rect x="10" y="96" width="880" height="160" rx="10" fill="#f8fafc" stroke="#cbd5e1"/>
+<text x="24" y="118" font-size="13" font-weight="700" fill="#0f172a">Badeel web application (Flask, Jinja2, vanilla JS) — security middleware on every request</text>
+<g font-size="11">
+<rect x="24" y="130" width="160" height="112" rx="8" fill="#fff" stroke="#94a3b8"/><text x="34" y="150" font-weight="700">Search</text><text x="34" y="168">TF-IDF candidates</text><text x="34" y="184">12-feature learned ranker</text><text x="34" y="200">phonetic Arabic/English</text><text x="34" y="216">OCR (Tesseract) · voice</text>
+<rect x="196" y="130" width="160" height="112" rx="8" fill="#fff" stroke="#94a3b8"/><text x="206" y="150" font-weight="700">Exact matching</text><text x="206" y="168">ingredient + strength</text><text x="206" y="184">+ dosage form keys</text><text x="206" y="200">price per unit, savings</text><text x="206" y="216">shortage status</text>
+<rect x="368" y="130" width="160" height="112" rx="8" fill="#fff" stroke="#94a3b8"/><text x="378" y="150" font-weight="700">Safety layer</text><text x="378" y="168">interactions · allergies</text><text x="378" y="184">contraindications</text><text x="378" y="200">look-alike names</text><text x="378" y="216">side effects · symptoms</text>
+<rect x="540" y="130" width="160" height="112" rx="8" fill="#fff" stroke="#94a3b8"/><text x="550" y="150" font-weight="700">Patient services</text><text x="550" y="168">saved medicines</text><text x="550" y="184">reminders, refill alerts</text><text x="550" y="200">health profile (encrypted)</text><text x="550" y="216">dashboards per role</text>
+<rect x="712" y="130" width="164" height="112" rx="8" fill="#fff1f2" stroke="#fda4af"/><text x="722" y="150" font-weight="700" fill="#9f1239">Security</text><text x="722" y="168">CSP, CSRF, rate limits</text><text x="722" y="184">Argon2/strong passwords</text><text x="722" y="200">Fernet health data</text><text x="722" y="216">audit + security log, trap</text>
+</g>
+<rect x="10" y="280" width="430" height="80" rx="10" fill="#f0fdf4" stroke="#86efac"/>
+<text x="24" y="303" font-size="13" font-weight="700" fill="#14532d">Database (SQLite now → PostgreSQL)</text>
+<text x="24" y="322" font-size="11" fill="#334155">drugs, ingredients, users, favorites, reminders, audit_log,</text>
+<text x="24" y="338" font-size="11" fill="#334155">drug_interactions, ingredient_conditions, ingredient_labels, lasa_pairs,</text>
+<text x="24" y="354" font-size="11" fill="#334155">ingredient_side_effects, ingredient_rxnorm, otc_ingredients</text>
+<rect x="460" y="280" width="430" height="80" rx="10" fill="#fefce8" stroke="#fde047"/>
+<text x="474" y="303" font-size="13" font-weight="700" fill="#713f12">Offline data pipeline (manage.py collect-data)</text>
+<text x="474" y="322" font-size="11" fill="#334155">download → parse → normalise names (moiety key + RxNorm)</text>
+<text x="474" y="338" font-size="11" fill="#334155">→ keep only ingredients sold in Egypt → load → coverage report</text>
+<text x="474" y="354" font-size="11" fill="#334155">→ export dataset (CSV + dataset card)</text>
+<rect x="460" y="384" width="430" height="76" rx="10" fill="#fff" stroke="#cbd5e1" stroke-dasharray="4 3"/>
+<text x="474" y="405" font-size="12" font-weight="700">Outside sources</text>
+<text x="474" y="423" font-size="11" fill="#334155">Egyptian drug list · EDA OTC list · DDInter 2.0 · openFDA labels</text>
+<text x="474" y="439" font-size="11" fill="#334155">DrugCentral · SIDER 4.1 · ISMP confused names · RxNorm (RxNav)</text>
+<text x="474" y="455" font-size="11" fill="#334155">Later: pharmacist-reviewed gold set, real user queries, box photos</text>
+<path d="M450 72 V94" stroke="#475569" stroke-width="1.6" marker-end="url(#ar)"/>
+<path d="M225 256 V278" stroke="#475569" stroke-width="1.6" marker-end="url(#ar)"/>
+<path d="M675 384 V362" stroke="#475569" stroke-width="1.6" marker-end="url(#ar)"/>
+<path d="M460 320 H442" stroke="#475569" stroke-width="1.6" marker-end="url(#ar)"/>
+</svg>
+<div class="two">
+<div><h3>Technology</h3><ul>
+<li>Python 3, Flask (app factory, 7 blueprints), Jinja2, vanilla JavaScript, CSS tokens (dark/light)</li>
+<li>SQLite today; PostgreSQL for production (Semester 1)</li>
+<li>scikit-learn (ranker), Tesseract OCR, Web Speech API, Web Push (PWA)</li>
+<li>gunicorn on Render; PythonAnywhere as a fallback</li>
+</ul></div>
+<div><h3>Security controls in place</h3><ul>
+<li>Strict Content-Security-Policy (no inline script or style), CSRF tokens, rate limits</li>
+<li>Strong passwords (≥ 15 characters), role checks on every route</li>
+<li>Health data encrypted with Fernet and stored only with consent</li>
+<li>Audit log that never names the medicine or condition; security log; trap pages for scanners</li>
+</ul></div></div>
+</section>
+
+<section class="page">
+<h2>4. Where we are: work completed</h2>
+<p class="small">Status on 26 Nov 2026, from the main branch, open pull requests and <code>docs/results/</code>.</p>
+<table class=""><thead><tr><th>Area</th><th>What exists</th><th>Measured result</th><th>Status</th></tr></thead><tbody><tr><td>Core product</td><td>Exact-alternative engine (same ingredient + strength + form), price per unit, shortage status, roles (patient, pharmacist, admin), Arabic/English</td><td>22,757 products imported in 2.9 s; 9,752 products have ≥1 exact alternative; 2,072 groups (median 3, max 43)</td><td><span class="pill ok">Done</span></td></tr><tr><td>Search</td><td>Spelling-tolerant search: TF-IDF candidates + 12-feature logistic-regression ranker, Arabic transliteration</td><td>5-fold grouped CV, 18,000 queries: top-1 83.0% → 93.0%, top-3 97.3%, MRR 0.952; Arabic queries 74.1% → 86.2%</td><td><span class="pill ok">Done</span></td></tr><tr><td>Data enrichment</td><td>DDInter interactions, openFDA leaflets, DrugCentral uses and contraindications</td><td>164,839 interaction pairs (71.7% of products); leaflets for 43.7%; known use for 80.4%</td><td><span class="pill ok">Done</span></td></tr><tr><td>Open dataset v1.0</td><td>6 CSV files + dataset card, licences per file</td><td>products 22,757 · ingredients 57,932 · interactions 72,490 · conditions 32,291 · leaflets 1,007</td><td><span class="pill ok">Done</span></td></tr><tr><td>Official verification</td><td>Cross-check with the EDA list of medicines sold without a prescription (Jan 2026)</td><td>321 of 355 EDA products found; same ingredients 93.3%; same strength 86.2%; 80 rows sent to human review</td><td><span class="pill ok">Done</span></td></tr><tr><td>Interface</td><td>Redesign, dark/light mode, a dashboard per role</td><td>Merged (PR #4)</td><td><span class="pill ok">Done</span></td></tr><tr><td>Voice & photo search</td><td>Web Speech API (ar-EG / en-US); Tesseract OCR, photo deleted after reading</td><td>Merged (PR #17)</td><td><span class="pill ok">Done</span></td></tr><tr><td>Reminders & PWA</td><td>Dose reminders, refill alert from pack size, installable app, push notifications</td><td>Merged (PR #18)</td><td><span class="pill ok">Done</span></td></tr><tr><td>Deployment</td><td>PythonAnywhere guide; Render blueprint with gunicorn</td><td>Merged (PR #5, PR #21); custom domain pending (issue #6)</td><td><span class="pill doing">In progress</span></td></tr><tr><td>Safety data</td><td>Look-alike names (ISMP + Egyptian pairs), SIDER side effects, RxNorm names, combination strengths, symptom explorer</td><td>390 ISMP + 502 Egyptian pairs; side effects for 46.0%; 2,976 ingredients in RxNorm; 47 strength proposals</td><td><span class="pill rev">In review</span></td></tr><tr><td>Testing & security</td><td>Unit/integration tests; automated attack suite</td><td>132 tests pass; 65/65 attacks blocked, 35/35 detected; 239 requests/s, 95% < 114 ms</td><td><span class="pill ok">Done</span></td></tr><tr><td>Thesis</td><td>Chapter 1 (introduction, problem, objectives)</td><td>Written</td><td><span class="pill ok">Done</span></td></tr></tbody></table>
+<div class="box warn"><b>Honest limits to state in the thesis:</b>
+<ul>
+<li>The 40-pair matching test (100% precision and recall) is too small to claim much. The 500-pair gold set fixes this.</li>
+<li>Search accuracy is so far measured on generated misspellings only.</li>
+<li>DrugCentral links some ingredients to diseases that come from combination products.</li>
+<li>2,308 rows of the source list have no active ingredient and are skipped.</li>
+</ul></div>
+</section>
+
+<section class="page">
+<h2>5. Data sources: what, where from, licence</h2>
+<table class=""><thead><tr><th>Source</th><th>What we take</th><th>Where from / how</th><th>Status</th><th>Licence</th></tr></thead><tbody><tr><td>Egyptian drug list</td><td>Products, Arabic/English names, ingredients, price, form, company</td><td>GitHub (egyptian-drug-database), ~25k rows</td><td>Loaded</td><td>Open</td></tr><tr><td>EDA OTC list (Jan 2026)</td><td>Official list of medicines sold without a prescription</td><td>edaegypt.gov.eg PDF</td><td>Loaded</td><td>Public document</td></tr><tr><td>DDInter 2.0</td><td>Drug–drug interactions with severity</td><td>ddinter2.scbdd.com, 10 CSV files</td><td>Loaded</td><td>CC BY-NC-SA 4.0 (non-commercial)</td></tr><tr><td>openFDA drug labels</td><td>Leaflet sections: dosage, warnings, children, pregnancy</td><td>api.fda.gov bulk download</td><td>Loaded</td><td>Public domain</td></tr><tr><td>DrugCentral</td><td>What each ingredient treats; contraindications</td><td>drugcentral.org PostgreSQL dump (pg_restore)</td><td>Loaded</td><td>CC BY-SA 4.0</td></tr><tr><td>SIDER 4.1</td><td>Side effects with trial frequencies</td><td>sideeffects.embl.de</td><td>Loaded (PR #19)</td><td>CC BY-SA 4.0</td></tr><tr><td>ISMP Confused Drug Names</td><td>Look-alike / sound-alike pairs</td><td>ismp.org (2015 PDF)</td><td>Loaded (PR #19)</td><td>© ISMP, attribution</td></tr><tr><td>RxNorm via RxNav</td><td>Official ingredient names, clinical drugs and strengths</td><td>rxnav.nlm.nih.gov REST API, no key</td><td>Loaded (PR #19)</td><td>Free, ≤20 requests/s</td></tr><tr><td>Pharmacist-reviewed gold set</td><td>500 product pairs labelled match / no match</td><td>Built by the team, reviewed by a pharmacist</td><td>To build</td><td>Project (CC0)</td></tr><tr><td>Real misspelled queries</td><td>1,000+ queries typed by people (Arabic, English, Franco)</td><td>Dictation study (see §6)</td><td>To build</td><td>Project, consented</td></tr><tr><td>Box photo set</td><td>200 photos of Egyptian medicine boxes</td><td>Taken by the team with phones</td><td>To build</td><td>Project</td></tr><tr><td>Voice set</td><td>100 spoken drug names, 10 speakers</td><td>Recorded in the app with consent</td><td>To build</td><td>Project, consented</td></tr></tbody></table>
+<h3>How the data is joined</h3>
+<p>Each source names ingredients its own way. Badeel converts every name to one <b>moiety key</b>: lower case, synonyms unified, salt words removed for matching. The key is then extended with the official <b>RxNorm</b> name (paracetamol → acetaminophen). A source row is kept only when its ingredient is sold in Egypt, which keeps the database small and fast.</p>
+<p>The whole pipeline runs with <code>python manage.py collect-data</code>. Every run writes the date and licence of each source to <code>data/raw/…/SOURCE.json</code> and prints a coverage report, so the numbers in this document can be reproduced.</p>
+</section>
+
+<section class="page">
+<h2>6. Semester 1 — implementation plan</h2>
+<p><b>Window:</b> 29 November 2026 – 14 January 2027 (7 weeks), then exams. <b>Goal:</b> a complete, verified and secured system, frozen and deployed by <b>14 January</b>.</p>
+<div class="gantt" style="grid-template-columns: 210px repeat(7, 1fr)"><div class="gl gh">Semester 1</div><div class="gw">W1<br>29 Nov</div><div class="gw">W2<br>6 Dec</div><div class="gw">W3<br>13 Dec</div><div class="gw">W4<br>20 Dec</div><div class="gw">W5<br>27 Dec</div><div class="gw">W6<br>3 Jan</div><div class="gw">W7<br>10 Jan</div><div class="gl"><b>Merge open work, rebrand</b><span>Full stack</span></div><div class="gc g-fs"></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gl"><b>Data review: EDA, 100-sample audit</b><span>Data science</span></div><div class="gc g-ds"></div><div class="gc g-ds"></div><div class="gc g-ds"></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gl"><b>Gold set 40 → 500 pairs</b><span>Data science + pharmacist</span></div><div class="gc "></div><div class="gc g-ds"></div><div class="gc g-ds"></div><div class="gc g-ds"></div><div class="gc g-ds"></div><div class="gc "></div><div class="gc "></div><div class="gl"><b>Fill 2,308 missing rows, combos</b><span>Data science</span></div><div class="gc "></div><div class="gc g-ds"></div><div class="gc g-ds"></div><div class="gc g-ds"></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gl"><b>Cabinet checker, market analytics</b><span>Data science + full stack</span></div><div class="gc "></div><div class="gc "></div><div class="gc g-ds"></div><div class="gc g-ds"></div><div class="gc g-ds"></div><div class="gc "></div><div class="gc "></div><div class="gl"><b>LightGBM LambdaMART vs current</b><span>AI</span></div><div class="gc g-ai"></div><div class="gc g-ai"></div><div class="gc g-ai"></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gl"><b>Arabic/Franco phonetic features</b><span>AI</span></div><div class="gc "></div><div class="gc g-ai"></div><div class="gc g-ai"></div><div class="gc g-ai"></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gl"><b>OCR + voice benchmark sets</b><span>AI</span></div><div class="gc "></div><div class="gc "></div><div class="gc g-ai"></div><div class="gc g-ai"></div><div class="gc g-ai"></div><div class="gc g-ai"></div><div class="gc "></div><div class="gl"><b>Grounded assistant (stretch)</b><span>AI</span></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc g-str"></div><div class="gc g-str"></div><div class="gc g-str"></div><div class="gl"><b>Hash-chained log, 2FA, blind index</b><span>Cybersecurity</span></div><div class="gc g-cy"></div><div class="gc g-cy"></div><div class="gc g-cy"></div><div class="gc g-cy"></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gl"><b>Bot detection → honeypot</b><span>Cybersecurity</span></div><div class="gc "></div><div class="gc "></div><div class="gc g-cy"></div><div class="gc g-cy"></div><div class="gc g-cy"></div><div class="gc "></div><div class="gc "></div><div class="gl"><b>ZAP scan + Burp manual test</b><span>Cybersecurity</span></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc g-cy"></div><div class="gc g-cy"></div><div class="gc g-cy"></div><div class="gc "></div><div class="gl"><b>PostgreSQL, HTTPS, backups, domain</b><span>Cybersecurity / DevOps</span></div><div class="gc "></div><div class="gc g-cy"></div><div class="gc g-cy"></div><div class="gc g-cy"></div><div class="gc g-cy"></div><div class="gc g-cy"></div><div class="gc "></div><div class="gl"><b>Family profiles, emergency card</b><span>Full stack</span></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc g-fs"></div><div class="gc g-fs"></div><div class="gc g-fs"></div><div class="gc "></div><div class="gl"><b>Ethics approval for user study</b><span>Supervisor + team</span></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc g-pm"></div><div class="gc g-pm"></div><div class="gc g-pm"></div><div class="gl"><b>Feature freeze, v1.0 release, demo</b><span>Everyone</span></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc g-ms"></div></div>
+<div class="legend"><span><i class="g-ai"></i>AI</span><span><i class="g-ds"></i>Data science</span><span><i class="g-cy"></i>Cybersecurity / DevOps</span><span><i class="g-fs"></i>Full stack / UX</span><span><i class="g-pm"></i>Writing / management</span><span><i class="g-ms"></i>Milestone</span><span><i class="g-str"></i>Stretch</span></div>
+<h3>6.1 AI track — Mohamed Ashraf</h3>
+<table class="bl"><thead><tr><th>Task</th><th>How</th><th>Data / tools</th><th>Done when</th><th>Owner</th><th>Status</th></tr></thead><tbody><tr><td><b>LightGBM LambdaMART vs current ranker</b><br><span class="small">issue #15</span></td><td>Same 12 features + 4 new; train lightgbm.LGBMRanker on the 18,000-query set; same 5-fold grouped CV; report top-1, top-3, MRR per error type</td><td>pip lightgbm; ml/train.py</td><td>Table with both models, ±std; McNemar test on top-1</td><td>Mohamed Ashraf</td><td><span class="pill todo">To do</span></td></tr><tr><td><b>Arabic / Franco phonetic features</b></td><td>Arabic→Latin transliteration table, Double Metaphone on both sides, Franco digits (3, 7, 2 for the letters ain, haa, hamza)</td><td>jellyfish / metaphone</td><td>Arabic top-1 ≥ 90% (now 86.2%)</td><td>Mohamed Ashraf</td><td><span class="pill todo">To do</span></td></tr><tr><td><b>Real-query benchmark</b></td><td>Run the model on the dictation study queries (§6); compare with synthetic results</td><td>Study data</td><td>Top-1 on real queries reported</td><td>Mohamed Ashraf</td><td><span class="pill todo">To do</span></td></tr><tr><td><b>OCR benchmark</b></td><td>200 box photos → Tesseract → search; measure product found in top-1/top-3; try image pre-processing (grayscale, threshold, deskew)</td><td>Tesseract ara+eng, OpenCV</td><td>Top-3 ≥ 80% on clear photos</td><td>Mohamed Ashraf + DS</td><td><span class="pill todo">To do</span></td></tr><tr><td><b>Voice benchmark</b></td><td>100 recorded names → speech text → search</td><td>Web Speech API</td><td>Top-1 reported per language</td><td>Mohamed Ashraf</td><td><span class="pill todo">To do</span></td></tr><tr><td><b>Grounded assistant (stretch)</b></td><td>Answers only from Badeel's own database (retrieve product, leaflet, interactions → fixed templates or a small LLM with citations); refuses dosing questions</td><td>Retrieval + templates; optional LLM API</td><td>0 answers without a source in a 100-question test</td><td>Mohamed Ashraf</td><td><span class="pill str">Stretch</span></td></tr></tbody></table>
+</section>
+
+<section class="page">
+<h3>6.2 Data science track — Bahaa, Abdelrahman, Mohamed Ali</h3>
+<table class="bl"><thead><tr><th>Task</th><th>How</th><th>Data / tools</th><th>Done when</th><th>Owner</th><th>Status</th></tr></thead><tbody><tr><td><b>Finish EDA review</b><br><span class="small">issue #12, #13, PR #20</span></td><td>Review the 80 flagged rows; record decision and reason</td><td>data/verification/eda_otc_review.csv</td><td>All 80 rows decided</td><td>Bahaa, Abdelrahman</td><td><span class="pill todo">To do</span></td></tr><tr><td><b>100-product audit</b><br><span class="small">issue #14</span></td><td>Random sample (seed fixed) checked against EDA site and pharmacy price</td><td>edaegypt.gov.eg, pharmacy apps</td><td>Error rate with 95% CI</td><td>Mohamed Ali</td><td><span class="pill todo">To do</span></td></tr><tr><td><b>Gold set 40 → 500 pairs</b></td><td>Stratified sample: single/combination, forms, near-misses (same ingredient, other strength); pharmacist labels; Cohen's κ on 100 double-labelled pairs</td><td>Pharmacist volunteer</td><td>500 labelled pairs, κ ≥ 0.8</td><td>Data science team</td><td><span class="pill todo">To do</span></td></tr><tr><td><b>Combination strengths</b></td><td>Pharmacist reviews the 47 RxNorm proposals; extend parser for “500/125” and per-5 ml totals</td><td>Pharmacist page (PR #19)</td><td>Coverage of combination products ↑ (report before/after)</td><td>Abdelrahman</td><td><span class="pill todo">To do</span></td></tr><tr><td><b>2,308 rows without ingredient</b></td><td>Match by brand to a second Egyptian list (Kaggle) or EDA search; manual fill for the most sold</td><td>Kaggle Egyptian drug datasets</td><td>≥ 50% filled, source per row</td><td>Mohamed Ali</td><td><span class="pill todo">To do</span></td></tr><tr><td><b>Medicine cabinet checker</b></td><td>Patient enters 2–6 medicines: interactions between all pairs + same ingredient under two brands (double dose)</td><td>DDInter table, ingredient keys</td><td>Page + tests</td><td>Bahaa + full stack</td><td><span class="pill todo">To do</span></td></tr><tr><td><b>Market analytics page</b></td><td>Shortage rate per class, average savings of the cheapest exact alternative, companies</td><td>Badeel database</td><td>Page with 4 charts</td><td>Data science team</td><td><span class="pill todo">To do</span></td></tr><tr><td><b>Dataset v2.0</b></td><td>Add safety tables, gold set, query benchmark; Zenodo release for a DOI</td><td>zenodo.org GitHub integration</td><td>DOI cited in the paper</td><td>Data science team</td><td><span class="pill todo">To do</span></td></tr></tbody></table>
+<h3>6.3 Full stack and user experience — Eng. Toqa, Youssef Ali</h3>
+<table class="bl"><thead><tr><th>Task</th><th>How</th><th>Data / tools</th><th>Done when</th><th>Owner</th><th>Status</th></tr></thead><tbody><tr><td><b>Merge open work</b></td><td>Review and merge PR #19 (safety data) and PR #20 (EDA review)</td><td>GitHub</td><td>Main branch green</td><td>Toqa, Youssef Ali</td><td><span class="pill todo">To do</span></td></tr><tr><td><b>Rebrand</b></td><td>Choose the final name, logo and colour palette; apply site-wide with CSS tokens</td><td>Design proposals sent</td><td>One commit, screenshots</td><td>Toqa + team vote</td><td><span class="pill todo">To do</span></td></tr><tr><td><b>Family profiles</b></td><td>Sub-profiles (father, mother, child) each with conditions, allergies, medicines; “searching for: …” switch</td><td>Existing health profile code</td><td>Warnings follow the chosen person</td><td>Full stack</td><td><span class="pill todo">To do</span></td></tr><tr><td><b>Emergency card</b></td><td>QR card with blood type, conditions, allergies; patient can switch the link off</td><td>qrcode library</td><td>Card + revocable link</td><td>Full stack + cyber</td><td><span class="pill todo">To do</span></td></tr><tr><td><b>Accessibility</b></td><td>Large-text mode, WCAG 2.2 AA contrast, keyboard use, screen reader labels</td><td>axe DevTools, Lighthouse</td><td>Lighthouse accessibility ≥ 95</td><td>Full stack</td><td><span class="pill todo">To do</span></td></tr></tbody></table>
+</section>
+
+<section class="page">
+<h3>6.4 Cybersecurity and DevOps track — Youssef Ali, Mohamed Adel, Ziad, Mahmoud Eid, Ahmed Taha, Youssef Awad</h3>
+<table class="bl"><thead><tr><th>Task</th><th>How</th><th>Data / tools</th><th>Done when</th><th>Owner</th><th>Status</th></tr></thead><tbody><tr><td><b>Manual penetration test</b><br><span class="small">issue #9</span></td><td>Burp Suite on every page and role; OWASP WSTG checklist; report with CVSS</td><td>Burp Community</td><td>0 high/critical open</td><td>Mahmoud Eid</td><td><span class="pill todo">To do</span></td></tr><tr><td><b>Automated scan</b><br><span class="small">issue #10</span></td><td>OWASP ZAP baseline + full scan, authenticated</td><td>ZAP</td><td>Findings table for the paper</td><td>Ahmed Taha</td><td><span class="pill todo">To do</span></td></tr><tr><td><b>Tamper-evident audit log</b></td><td>Each row stores SHA-256(previous hash + row); a check command detects edits or deletions</td><td>hashlib</td><td>Test: changing one row is detected</td><td>Youssef Ali</td><td><span class="pill todo">To do</span></td></tr><tr><td><b>2FA for admin & pharmacist</b></td><td>TOTP (RFC 6238) with recovery codes</td><td>pyotp + QR</td><td>Login needs the code; tests</td><td>Mohamed Adel</td><td><span class="pill todo">To do</span></td></tr><tr><td><b>Allergy check without decrypting</b></td><td>Blind index: HMAC-SHA256(key, ingredient) stored next to the encrypted list</td><td>hmac</td><td>Allergy warnings work; no plaintext in RAM per page</td><td>Ziad</td><td><span class="pill todo">To do</span></td></tr><tr><td><b>Bot detection → honeypot</b></td><td>Features per session (rate, path entropy, trap hits); Isolation Forest flags scrapers and sends them to trap pages</td><td>scikit-learn</td><td>Precision/recall on simulated bots</td><td>Ahmed Taha</td><td><span class="pill todo">To do</span></td></tr><tr><td><b>Production hardening</b><br><span class="small">issue #6, #11</span></td><td>PostgreSQL, HTTPS, secrets in environment, nightly backups + restore drill, custom domain</td><td>Render, pg_dump</td><td>Restore tested; HTTPS A on SSL Labs</td><td>Youssef Awad, Youssef Ali</td><td><span class="pill todo">To do</span></td></tr><tr><td><b>Privacy & law</b><br><span class="small">issue #7, #8</span></td><td>Privacy policy (AR/EN); requirements of Egypt's Personal Data Protection Law No. 151 of 2020 for health data</td><td>Law text, Data Protection Center</td><td>Policy page + compliance checklist</td><td>Mohamed Adel, Ziad</td><td><span class="pill todo">To do</span></td></tr></tbody></table>
+<h3>6.5 Supervisor and management</h3>
+<ul>
+<li>Dr. Amira's approval to launch the public site (issue #16), with weekly follow-up of the team.</li>
+<li><b>Ethics approval</b> for the user study and the dictation study, requested before the January exams so that Semester 2 starts on time. Consent forms in Arabic; no names stored with the answers.</li>
+<li>Book a pharmacist (Faculty of Pharmacy) for the gold set and the warning review: about 6 hours in total, split into short sessions.</li>
+</ul>
+<div class="box"><b>Feature freeze on 14 January 2027.</b> After this date only bug fixes, text and accessibility changes go in. Anything unfinished moves to "future work" in the thesis, and stretch items are cut first.</div>
+</section>
+
+<section class="page">
+<h2>7. Evaluation plan</h2>
+<p>Each claim in the thesis and the paper is tied to one experiment, one dataset and one script.</p>
+<table class=""><thead><tr><th>What</th><th>Test data</th><th>Metrics</th><th>Target / status</th></tr></thead><tbody><tr><td>Exact matching</td><td>500-pair pharmacist gold set</td><td>Precision, recall, F1; errors by cause</td><td>P ≥ 0.98 (a wrong alternative is the worst error)</td></tr><tr><td>Search (synthetic)</td><td>18,000+ generated misspellings, grouped 5-fold CV</td><td>Top-1, top-3, MRR per error type; model vs baseline vs LightGBM</td><td>Done: 93.0% top-1</td></tr><tr><td>Search (real)</td><td>1,000+ queries from the dictation study</td><td>Same metrics; synthetic vs real gap</td><td>Top-1 ≥ 85%</td></tr><tr><td>Photo / voice</td><td>200 photos; 100 recordings</td><td>Product in top-1 / top-3; failure causes</td><td>Top-3 ≥ 80% (photo)</td></tr><tr><td>Data accuracy</td><td>EDA cross-check; 100-product audit</td><td>Agreement %, error rate with 95% CI</td><td>Done (EDA); audit pending</td></tr><tr><td>Safety warnings</td><td>200 warnings sampled, reviewed by a pharmacist</td><td>Precision per source (DDInter, DrugCentral, SIDER, LASA)</td><td>Report honestly; fix sources < 0.8</td></tr><tr><td>Usability</td><td>Patients, pharmacists, older adults (n ≥ 30)</td><td>SUS score, task success, time on task</td><td>SUS ≥ 70</td></tr><tr><td>Security</td><td>Attack suite, ZAP, Burp</td><td>Prevention and detection rate; findings by severity</td><td>100% / 0 high open</td></tr><tr><td>Performance</td><td>Load test, 20 users at once; 20,000-product scale test</td><td>Requests/s, p95 latency</td><td>Done: 239 req/s, p95 114 ms</td></tr></tbody></table>
+<h3>How the new test data is built</h3>
+<ul>
+<li><b>Gold set (500 pairs).</b> Stratified by single vs combination products, dosage form, and "near misses" (same ingredient, different strength or salt). A pharmacist labels each pair "exact alternative" or "not". 100 pairs are labelled twice to report agreement (Cohen's κ).</li>
+<li><b>Dictation study (real queries).</b> Volunteers hear or see 40 drug names each (audio, box photo, handwritten note) and type what they would search. 30 volunteers × 40 names = 1,200 real queries in Arabic, English and Franco. No personal data is kept.</li>
+<li><b>Photo set.</b> 200 boxes photographed by the team in normal light, at two angles, with phones of different quality.</li>
+<li><b>User study.</b> Five tasks (find an alternative, save a medicine, read a warning, set a reminder, use voice search), then the System Usability Scale. Three groups: patients, pharmacists, adults over 60.</li>
+<li><b>Statistics.</b> 95% confidence intervals for proportions; McNemar's test when two models answer the same queries; mean ± standard deviation across cross-validation folds.</li>
+</ul>
+</section>
+
+<section class="page">
+<h2>8. Semester 2 — experiments, thesis, research paper</h2>
+<p><b>Window:</b> about 7 February – 26 June 2027 (20 weeks; adjust to the official ECU calendar). Ramadan falls around 8 February – 9 March 2027, so the first weeks are for experiments that need little coding. <b>No new features</b>: only fixes and polish.</p>
+<div class="gantt" style="grid-template-columns: 210px repeat(20, 1fr)"><div class="gl gh">Semester 2</div><div class="gw">W1</div><div class="gw">W2</div><div class="gw">W3</div><div class="gw">W4</div><div class="gw">W5</div><div class="gw">W6</div><div class="gw">W7</div><div class="gw">W8</div><div class="gw">W9</div><div class="gw">W10</div><div class="gw">W11</div><div class="gw">W12</div><div class="gw">W13</div><div class="gw">W14</div><div class="gw">W15</div><div class="gw">W16</div><div class="gw">W17</div><div class="gw">W18</div><div class="gw">W19</div><div class="gw">W20</div><div class="gl"><b>Final experiments (benchmarks)</b><span>AI + Data science</span></div><div class="gc g-ai"></div><div class="gc g-ai"></div><div class="gc g-ai"></div><div class="gc g-ai"></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gl"><b>User study (SUS, n ≥ 30)</b><span>Full stack + all</span></div><div class="gc "></div><div class="gc g-fs"></div><div class="gc g-fs"></div><div class="gc g-fs"></div><div class="gc g-fs"></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gl"><b>Pharmacist validation of warnings</b><span>Data science</span></div><div class="gc "></div><div class="gc g-ds"></div><div class="gc g-ds"></div><div class="gc g-ds"></div><div class="gc g-ds"></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gl"><b>Dataset v2.0 with DOI</b><span>Data science</span></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc g-ds"></div><div class="gc g-ds"></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gl"><b>Thesis ch. 2–3 (literature, analysis)</b><span>All tracks</span></div><div class="gc "></div><div class="gc "></div><div class="gc g-pm"></div><div class="gc g-pm"></div><div class="gc g-pm"></div><div class="gc g-pm"></div><div class="gc g-pm"></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gl"><b>Thesis ch. 4–5 (design, build)</b><span>All tracks</span></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc g-pm"></div><div class="gc g-pm"></div><div class="gc g-pm"></div><div class="gc g-pm"></div><div class="gc g-pm"></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gl"><b>Thesis ch. 6–7 (evaluation, conclusion)</b><span>All tracks</span></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc g-pm"></div><div class="gc g-pm"></div><div class="gc g-pm"></div><div class="gc g-pm"></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gl"><b>Paper A draft → internal review</b><span>Paper team</span></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc g-ms"></div><div class="gc g-ms"></div><div class="gc g-ms"></div><div class="gc g-ms"></div><div class="gc g-ms"></div><div class="gc g-ms"></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gl"><b>Paper A submission</b><span>Paper team</span></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc g-ms"></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gl"><b>Paper B (dataset) — Data in Brief</b><span>Data science</span></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc g-str"></div><div class="gc g-str"></div><div class="gc g-str"></div><div class="gc g-str"></div><div class="gc g-str"></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gl"><b>Bug fixes only, polish, accessibility</b><span>Full stack + cyber</span></div><div class="gc g-cy"></div><div class="gc g-cy"></div><div class="gc g-cy"></div><div class="gc g-cy"></div><div class="gc g-cy"></div><div class="gc g-cy"></div><div class="gc g-cy"></div><div class="gc g-cy"></div><div class="gc g-cy"></div><div class="gc g-cy"></div><div class="gc g-cy"></div><div class="gc g-cy"></div><div class="gc g-cy"></div><div class="gc g-cy"></div><div class="gc g-cy"></div><div class="gc g-cy"></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gl"><b>Thesis full review by supervisor</b><span>Supervisor</span></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc g-pm"></div><div class="gc g-pm"></div><div class="gc g-pm"></div><div class="gc g-pm"></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gl"><b>Poster, demo video, rehearsals</b><span>Everyone</span></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc g-fs"></div><div class="gc g-fs"></div><div class="gc g-fs"></div><div class="gc g-fs"></div><div class="gc "></div><div class="gl"><b>Final submission + defense</b><span>Everyone</span></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc "></div><div class="gc g-ms"></div><div class="gc g-ms"></div></div>
+<div class="legend"><span><i class="g-ai"></i>AI</span><span><i class="g-ds"></i>Data science</span><span><i class="g-cy"></i>Cybersecurity / DevOps</span><span><i class="g-fs"></i>Full stack / UX</span><span><i class="g-pm"></i>Writing / management</span><span><i class="g-ms"></i>Milestone</span><span><i class="g-str"></i>Stretch</span></div>
+<div class="two">
+<div><h3>Phase A · W1–W5 · Experiments</h3><ul>
+<li>Run every benchmark from §7 on the frozen v1.0</li>
+<li>User study and dictation study (ethics approved in January)</li>
+<li>Pharmacist reviews the 200 warnings and finishes the gold set</li>
+<li>Release dataset v2.0 on Zenodo with a DOI</li></ul>
+<h3>Phase B · W3–W10 · Thesis chapters 2–5</h3><ul>
+<li>Literature review with a comparison table of 10–15 works</li>
+<li>Requirements, design and implementation, using the diagrams and code in the repository</li></ul></div>
+<div><h3>Phase C · W9–W14 · Evaluation + paper</h3><ul>
+<li>Chapter 6 from the experiment outputs; chapter 7</li>
+<li>Paper A drafted from chapters 4–6, reviewed by the supervisor, submitted in W14</li></ul>
+<h3>Phase D · W13–W20 · Finish</h3><ul>
+<li>Full thesis review; fix comments</li>
+<li>Poster, 3-minute demo video, slides</li>
+<li>Two full rehearsals with questions</li>
+<li>Defense, with a local copy of the site in case the internet fails</li></ul></div>
+</div>
+<h3>Thesis structure</h3>
+<table class=""><thead><tr><th>Ch.</th><th>Title</th><th>Content</th><th>Status</th></tr></thead><tbody><tr><td>1</td><td>Introduction</td><td>Problem, motivation, objectives, scope</td><td><span class="pill ok">Done</span></td></tr><tr><td>2</td><td>Literature review</td><td>Drug name matching, LASA, learned ranking, drug knowledge bases (RxNorm, DrugBank, DDInter, DrugCentral, SIDER), health app security; comparison table of 10–15 works</td><td><span class="pill todo">To do</span></td></tr><tr><td>3</td><td>Requirements & analysis</td><td>Stakeholders, use cases per role, functional / non-functional requirements, data requirements</td><td><span class="pill todo">To do</span></td></tr><tr><td>4</td><td>System design</td><td>Architecture, database schema, matching algorithm, ranking model, safety layer, security design, UI</td><td><span class="pill todo">To do</span></td></tr><tr><td>5</td><td>Implementation</td><td>Data pipeline, search, matching, safety, reminders/PWA, security controls, deployment</td><td><span class="pill todo">To do</span></td></tr><tr><td>6</td><td>Testing & evaluation</td><td>All experiments in §6 with tables, figures and error analysis</td><td><span class="pill todo">To do</span></td></tr><tr><td>7</td><td>Conclusion & future work</td><td>Contributions, limitations, next steps</td><td><span class="pill todo">To do</span></td></tr></tbody></table>
+</section>
+
+<section class="page">
+<h2>9. Milestones and acceptance criteria</h2>
+<p>A milestone is reached only when its evidence exists in the repository or on GitHub.</p>
+<table class=""><thead><tr><th>#</th><th>Date</th><th>Milestone</th><th>Evidence (done when)</th></tr></thead><tbody><tr><td>M1</td><td>Sun 6 Dec 2026</td><td>Open work merged; final name and palette chosen</td><td>PR #19, #20 merged; rebrand committed</td></tr><tr><td>M2</td><td>Sat 19 Dec 2026</td><td>Data verified</td><td>EDA review done; 100-sample audit with error rate; LightGBM comparison table</td></tr><tr><td>M3</td><td>Sat 2 Jan 2027</td><td>Security & data features complete</td><td>2FA, hash-chained log, blind index, PostgreSQL; gold set ≥ 300 pairs</td></tr><tr><td>M4</td><td>Sat 9 Jan 2027</td><td>Security tested</td><td>ZAP + Burp reports, 0 high/critical; backups restored once</td></tr><tr><td>M5</td><td>Thu 14 Jan 2027</td><td>Feature freeze — v1.0 release</td><td>All tests + attack suite green; live site with HTTPS and domain; demo to supervisor</td></tr><tr><td>M6</td><td>Sat 6 Mar 2027</td><td>Experiments done</td><td>Gold set 500 (κ reported); user study n ≥ 30; OCR/voice/real-query benchmarks; dataset v2.0 DOI</td></tr><tr><td>M7</td><td>Sat 3 Apr 2027</td><td>Thesis chapters 2–5 drafted</td><td>Reviewed by supervisor</td></tr><tr><td>M8</td><td>Sat 1 May 2027</td><td>Thesis chapters 6–7 + paper draft</td><td>All tables and figures generated from scripts in the repository</td></tr><tr><td>M9</td><td>Sat 15 May 2027</td><td>Paper A submitted</td><td>Submission confirmation</td></tr><tr><td>M10</td><td>June 2027 (official date)</td><td>Final thesis, poster, video, defense</td><td>Signed submission; rehearsal × 2</td></tr></tbody></table>
+<h3>Weekly rhythm</h3>
+<ul>
+<li><b>Sunday:</b> 30-minute stand-up per track. Each person says what they finished, what is next and what blocks them. Update the GitHub issue.</li>
+<li><b>Thursday:</b> pull requests reviewed and merged. Nothing is merged without passing tests and the attack suite.</li>
+<li><b>Every two weeks:</b> a short demo and progress report to the supervisor, using this table.</li>
+</ul>
+</section>
+
+<section class="page">
+<h2>10. Research paper plan</h2>
+<h3>Paper A — main paper</h3>
+<p><b>Working title:</b> <i>Badeel: Exact Medicine Alternatives with Bilingual Misspelling-Tolerant Search and Personalised Safety Warnings for the Egyptian Market.</i> The final title follows the final product name.</p>
+<p><b>Research questions</b></p>
+<ol>
+<li>RQ1. How accurately can rule-based normalisation identify exact alternatives in a noisy national drug list? (C2)</li>
+<li>RQ2. How much does learned ranking improve bilingual misspelled search over a TF-IDF baseline, and how does LightGBM compare? Do results on generated queries hold for real ones? (C3)</li>
+<li>RQ3. What coverage and precision do open international sources reach when linked to Egyptian products? (C1, C4)</li>
+<li>RQ4. Is the system usable by patients, pharmacists and older adults? (SUS)</li>
+</ol>
+<p><b>Structure (IMRaD, 8–10 pages):</b> introduction, related work, data, method (normalisation, ranking, safety layer), experiments, results, discussion and limitations, conclusion.</p>
+<p><b>Candidate venues</b> (check each call for papers and deadline in January):</p>
+<ul>
+<li>Journals with rolling submission: <i>JMIR Formative Research</i>; <i>BMC Medical Informatics and Decision Making</i>.</li>
+<li>IEEE conferences held in Egypt, for example NILES, ITC-Egypt and MIUCC.</li>
+</ul>
+<h3>Paper B — dataset paper (optional)</h3>
+<p>The linked Egyptian dataset (C1), submitted to <i>Data in Brief</i>, with the Zenodo DOI. It reuses chapter 5 and the coverage tables.</p>
+<h3>Paper C — security (optional)</h3>
+<p>A short paper on security by design for a health web app (C5): the attack suite, the tamper-evident log, blind-index allergy checks, and bot detection with a honeypot.</p>
+<div class="box"><b>Writing rules:</b>
+<ul>
+<li>Every number in the paper comes from a script in <code>checks/</code>, <code>ml/</code> or <code>manage.py</code>.</li>
+<li>Tables are generated, not typed.</li>
+<li>Limitations are stated plainly: generated queries, DrugCentral noise, SIDER age, the U.S. origin of the ISMP list.</li>
+</ul></div>
+</section>
+
+<section class="page">
+<h2>11. Risks, ethics and law</h2>
+<table class=""><thead><tr><th>Risk</th><th>Impact</th><th>What we do</th></tr></thead><tbody><tr><td>Pharmacist not available for labels</td><td>High</td><td>Ask the Faculty of Pharmacy in January; split the 500 pairs into 5 short sessions; pay in co-authorship acknowledgement</td></tr><tr><td>Medical harm from wrong advice</td><td>High</td><td>Information-only wording; danger signs stop suggestions; no dose calculator; disclaimer on every safety page; pharmacist review</td></tr><tr><td>DDInter licence is non-commercial</td><td>Medium</td><td>Academic use only; state it in the dataset card; swap source if the project becomes a product</td></tr><tr><td>Exams and Ramadan reduce time</td><td>Medium</td><td>Feature freeze 14 Jan; Ramadan (about 8 Feb – 9 Mar 2027) is for experiments, not new code</td></tr><tr><td>Scope creep</td><td>Medium</td><td>Only items in this plan; new ideas go to a “later” list; stretch items are cut first</td></tr><tr><td>Free hosting sleeps or loses data</td><td>Medium</td><td>PostgreSQL with nightly backups; restore drill; local copy for the defense</td></tr><tr><td>OCR weak on Arabic boxes</td><td>Low</td><td>Report honestly; English side of the box is the main input; pre-processing experiment</td></tr><tr><td>Paper rejected</td><td>Low</td><td>Target a second venue already chosen; dataset paper as a separate output</td></tr></tbody></table>
+<h3>Ethics</h3>
+<ul>
+<li>Badeel gives information, not prescriptions. There is no dose calculator, and a ticked danger sign stops all suggestions.</li>
+<li>Studies with people need university ethics approval, written consent, and anonymous answers.</li>
+<li>Health data is stored only with consent, encrypted, and can be deleted by the user.</li>
+</ul>
+<h3>Licences</h3>
+<ul>
+<li>Each dataset file carries the licence of its source.</li>
+<li>DDInter (non-commercial) and the share-alike sources (DrugCentral, SIDER) limit how the data can be reused. This is stated in the dataset card and the paper.</li>
+</ul>
+
+<h2 style="margin-top:6mm">12. Ways of working</h2>
+<ul>
+<li><b>One task, one GitHub issue.</b> Each issue has an owner, a "done when" line from this plan, and a link to its pull request.</li>
+<li><b>Branches and pull requests</b> for every change. A pull request is merged only when <code>python -m unittest</code> and <code>checks/security_check.py</code> pass.</li>
+<li><b>Results files</b> go in <code>docs/results/</code>. They are the source for the thesis and the paper.</li>
+<li><b>Data changes</b> run through <code>manage.py</code> commands, so the database can be rebuilt from scratch.</li>
+<li><b>This plan</b> is updated at every milestone: statuses, dates, and anything moved to future work.</li>
+</ul>
+</section>
+</body></html>
