@@ -32,14 +32,16 @@ s1_rows = [
     ("Data review: EDA, 100-sample audit", "Data science", 1, 3, "ds"),
     ("Gold set 40 → 500 pairs", "Data science + pharmacist", 2, 5, "ds"),
     ("Fill 2,308 missing rows, combos", "Data science", 2, 4, "ds"),
-    ("Cabinet checker, market analytics", "Data science + full stack", 3, 5, "ds"),
+    ("Cabinet checker (DDInter 2.0), analytics", "Data science + full stack", 3, 5, "ds"),
+    ("Recommender: ranking + safe alternative", "Data science", 3, 6, "ds"),
     ("LightGBM LambdaMART vs current", "AI", 1, 3, "ai"),
     ("Arabic/Franco phonetic features", "AI", 2, 4, "ai"),
     ("OCR + voice benchmark sets", "AI", 3, 6, "ai"),
-    ("Grounded assistant (stretch)", "AI", 5, 7, "str"),
+    ("Badeel assistant: chatbot + agent", "AI", 3, 7, "ai"),
     ("Hash-chained log, 2FA, blind index", "Cybersecurity", 1, 4, "cy"),
     ("Bot detection → honeypot", "Cybersecurity", 3, 5, "cy"),
     ("ZAP scan + Burp manual test", "Cybersecurity", 4, 6, "cy"),
+    ("LLM red teaming of the assistant", "Cybersecurity", 6, 7, "cy"),
     ("PostgreSQL, HTTPS, backups, domain", "Cybersecurity / DevOps", 2, 6, "cy"),
     ("Family profiles, emergency card", "Full stack", 4, 6, "fs"),
     ("Ethics approval for user study", "Supervisor + team", 5, 7, "pm"),
@@ -48,6 +50,8 @@ s1_rows = [
 s2_weeks = [f"W{i}" for i in range(1, 21)]
 s2_rows = [
     ("Final experiments (benchmarks)", "AI + Data science", 1, 4, "ai"),
+    ("Assistant evaluation (200 questions)", "AI + Data science", 1, 4, "ai"),
+    ("LLM red-team final run", "Cybersecurity", 2, 4, "cy"),
     ("User study (SUS, n ≥ 30)", "Full stack + all", 2, 5, "fs"),
     ("Pharmacist validation of warnings", "Data science", 2, 5, "ds"),
     ("Dataset v2.0 with DOI", "Data science", 4, 5, "ds"),
@@ -137,7 +141,8 @@ ai_rows = [
  ["Real-query benchmark", "Run the model on the dictation study queries (§6); compare with synthetic results", "Study data", "Top-1 on real queries reported", "Mohamed Ashraf", "new"],
  ["OCR benchmark", "200 box photos → Tesseract → search; measure product found in top-1/top-3; try image pre-processing (grayscale, threshold, deskew)", "Tesseract ara+eng, OpenCV", "Top-3 ≥ 80% on clear photos", "Mohamed Ashraf + DS", "new"],
  ["Voice benchmark", "100 recorded names → speech text → search", "Web Speech API", "Top-1 reported per language", "Mohamed Ashraf", "new"],
- ["Grounded assistant (stretch)", "Answers only from Badeel's own database (retrieve product, leaflet, interactions → fixed templates or a small LLM with citations); refuses dosing questions", "Retrieval + templates; optional LLM API", "0 answers without a source in a 100-question test", "Mohamed Ashraf", "stretch"],
+ ["Badeel assistant (chatbot + agent)", "LLM that answers only through Badeel tools (search, alternatives, interactions, leaflet, reminder with consent); refusals and danger-sign rules enforced in code; health profile never sent to the LLM. See §6.6", "LLM API or local open model; Flask route", "Works on the site; tool tests; refusal tests", "Mohamed Ashraf", "#22"],
+ ["Assistant evaluation set", "200 questions (AR/EN): alternatives, interactions, leaflet, 30 to refuse, 20 with danger signs; assistant vs the same LLM without tools", "Pharmacist reviews a sample", "Accuracy, citation, refusal and hallucination table", "Mohamed Ashraf + Bahaa", "#32"],
 ]
 ds_rows = [
  ["Finish EDA review", "Review the 80 flagged rows; record decision and reason", "data/verification/eda_otc_review.csv", "All 80 rows decided", "Bahaa, Abdelrahman", "#12, #13, PR #20"],
@@ -145,18 +150,21 @@ ds_rows = [
  ["Gold set 40 → 500 pairs", "Stratified sample: single/combination, forms, near-misses (same ingredient, other strength); pharmacist labels; Cohen's κ on 100 double-labelled pairs", "Pharmacist volunteer", "500 labelled pairs, κ ≥ 0.8", "Data science team", "new"],
  ["Combination strengths", "Pharmacist reviews the 47 RxNorm proposals; extend parser for “500/125” and per-5 ml totals", "Pharmacist page (PR #19)", "Coverage of combination products ↑ (report before/after)", "Abdelrahman", "new"],
  ["2,308 rows without ingredient", "Match by brand to a second Egyptian list (Kaggle) or EDA search; manual fill for the most sold", "Kaggle Egyptian drug datasets", "≥ 50% filled, source per row", "Mohamed Ali", "new"],
- ["Medicine cabinet checker", "Patient enters 2–6 medicines: interactions between all pairs + same ingredient under two brands (double dose)", "DDInter table, ingredient keys", "Page + tests", "Bahaa + full stack", "new"],
+ ["Medicine cabinet checker", "Patient enters 2–6 medicines: interactions between all pairs + same ingredient under two brands; load DDInter 2.0 drug–food, drug–disease and therapeutic duplication tables", "DDInter 2.0", "Page + tests + coverage numbers", "Abdelrahman", "#23"],
+ ["Recommender", "Personalised ranking of exact alternatives (availability, unit price, patient warnings, saves); “safe alternative” from the same ATC class with no interaction with saved medicines, clearly marked “ask your doctor”", "DrugCentral ATC, DDInter", "NDCG@5 before/after on the gold set", "Bahaa", "#31"],
+ ["Datasets from papers", "TWOSIDES/OFFSIDES; Semigran's 45 vignettes to test the symptom page; Peters' 17,164 variants (ask authors); Arabic medical QA (AraMed, MAQA) for question style only", "See §13", "Each source logged with licence and use", "Mohamed Ali", "#24"],
  ["Market analytics page", "Shortage rate per class, average savings of the cheapest exact alternative, companies", "Badeel database", "Page with 4 charts", "Data science team", "new"],
  ["Dataset v2.0", "Add safety tables, gold set, query benchmark; Zenodo release for a DOI", "zenodo.org GitHub integration", "DOI cited in the paper", "Data science team", "new"],
 ]
 cy_rows = [
  ["Manual penetration test", "Burp Suite on every page and role; OWASP WSTG checklist; report with CVSS", "Burp Community", "0 high/critical open", "Mahmoud Eid", "#9"],
  ["Automated scan", "OWASP ZAP baseline + full scan, authenticated", "ZAP", "Findings table for the paper", "Ahmed Taha", "#10"],
- ["Tamper-evident audit log", "Each row stores SHA-256(previous hash + row); a check command detects edits or deletions", "hashlib", "Test: changing one row is detected", "Youssef Ali", "new"],
- ["2FA for admin & pharmacist", "TOTP (RFC 6238) with recovery codes", "pyotp + QR", "Login needs the code; tests", "Mohamed Adel", "new"],
- ["Allergy check without decrypting", "Blind index: HMAC-SHA256(key, ingredient) stored next to the encrypted list", "hmac", "Allergy warnings work; no plaintext in RAM per page", "Ziad", "new"],
- ["Bot detection → honeypot", "Features per session (rate, path entropy, trap hits); Isolation Forest flags scrapers and sends them to trap pages", "scikit-learn", "Precision/recall on simulated bots", "Ahmed Taha", "new"],
- ["Production hardening", "PostgreSQL, HTTPS, secrets in environment, nightly backups + restore drill, custom domain", "Render, pg_dump", "Restore tested; HTTPS A on SSL Labs", "Youssef Awad, Youssef Ali", "#6, #11"],
+ ["Tamper-evident audit log", "Each row stores SHA-256(previous hash + row); a check command detects edits or deletions", "hashlib", "Test: changing one row is detected", "Youssef Ali", "#26"],
+ ["2FA for admin & pharmacist", "TOTP (RFC 6238) with recovery codes", "pyotp + QR", "Login needs the code; tests", "Mohamed Adel", "#27"],
+ ["Allergy check without decrypting", "Blind index: HMAC-SHA256(key, ingredient) stored next to the encrypted list", "hmac", "Allergy warnings work; no plaintext in RAM per page", "Ziad", "#28"],
+ ["Bot detection → honeypot", "Features per session (rate, path entropy, trap hits); Isolation Forest flags scrapers and sends them to trap pages", "scikit-learn", "Precision/recall on simulated bots", "Ahmed Taha", "#29"],
+ ["Production hardening", "PostgreSQL, HTTPS, secrets in environment, nightly backups + restore drill, custom domain", "Render, pg_dump", "Restore tested; HTTPS A on SSL Labs", "Youssef Awad, Youssef Ali", "#6, #11, #30"],
+ ["LLM red teaming", "100+ attacks on the assistant: prompt injection (direct and hidden in retrieved text), data leakage, actions without consent, Arabic/Franco attacks; attack success rate before and after defences", "OWASP Top 10 for LLM Apps", "Script + results table; candidate security paper", "Mahmoud Eid", "#25"],
  ["Privacy & law", "Privacy policy (AR/EN); requirements of Egypt's Personal Data Protection Law No. 151 of 2020 for health data", "Law text, Data Protection Center", "Policy page + compliance checklist", "Mohamed Adel, Ziad", "#7, #8"],
 ]
 fs_rows = [
@@ -181,6 +189,10 @@ milestones = [
 ]
 
 eval_rows = [
+ ["Assistant (chatbot + agent)", "200 questions, pharmacist-checked sample", "Accuracy, citation correctness, correct refusals, hallucination rate; vs same LLM without tools", "Hallucination ≈ 0; refusals 100%"],
+ ["LLM security", "100+ attack prompts", "Attack success rate before / after defences", "Report both"],
+ ["Recommender ranking", "Gold set with pharmacist preferences", "NDCG@5 vs price-only ranking", "Improvement reported"],
+ ["Symptom triage", "Semigran's 45 vignettes", "Emergencies caught by the danger-sign stop; ingredients shown for self-care cases", "All emergencies stopped"],
  ["Exact matching", "500-pair pharmacist gold set", "Precision, recall, F1; errors by cause", "P ≥ 0.98 (a wrong alternative is the worst error)"],
  ["Search (synthetic)", "18,000+ generated misspellings, grouped 5-fold CV", "Top-1, top-3, MRR per error type; model vs baseline vs LightGBM", "Done: 93.0% top-1"],
  ["Search (real)", "1,000+ queries from the dictation study", "Same metrics; synthetic vs real gap", "Top-1 ≥ 85%"],
@@ -261,6 +273,8 @@ ul { margin: 0 0 3mm; padding-left: 5mm; } li { margin-bottom: 1mm; }
 table.bl th:nth-child(1) { width: 15%; } table.bl th:nth-child(2) { width: 31%; } table.bl th:nth-child(3) { width: 14%; }
 table.bl th:nth-child(4) { width: 17%; } table.bl th:nth-child(5) { width: 13%; } table.bl th:nth-child(6) { width: 10%; }
 table.bl { font-size: 8.2pt; table-layout: fixed; } table.bl td { overflow-wrap: anywhere; }
+td a { color: #0e7490; text-decoration: none; overflow-wrap: anywhere; font-size: 7.2pt; }
+td a { color: #0e7490; text-decoration: none; overflow-wrap: anywhere; font-size: 7.2pt; }
 code { font-family: 'DejaVu Sans Mono', monospace; font-size: 8.3pt; background: #f1f5f9; padding: 0 1mm; border-radius: 1mm; }
 """
 
@@ -296,7 +310,7 @@ doc = f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Bade
     <b>Teaching assistant</b><span>Eng. Toqa Hamdy</span>
     <b>Team</b><span>Youssef Ali · Mohamed Ashraf · Bahaa · Abdelrahman · Mohamed Ali · Mohamed Adel · Ziad · Mahmoud Eid · Ahmed Taha · Youssef Awad</span>
     <b>Repository</b><span>github.com/youssefali62011-arch/badeel-project</span>
-    <b>Version</b><span>1.0 — 26 November 2026. Status data taken from the repository on this date.</span>
+    <b>Version</b><span>1.1 — 26 November 2026 (assistant, recommender, LLM security and related work added). Status data taken from the repository on this date.</span>
   </div>
 </section>
 
@@ -308,7 +322,7 @@ doc = f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Bade
 <li>Semester 1 — implementation plan (29 Nov 2026 – 14 Jan 2027)</li>
 <li>Evaluation plan: how every claim will be measured</li>
 <li>Semester 2 — experiments, thesis, research paper (Feb – Jun 2027)</li>
-<li>Milestones and acceptance criteria</li><li>Research paper plan</li><li>Risks, ethics and law</li><li>Ways of working</li>
+<li>Milestones and acceptance criteria</li><li>Research paper plan</li><li>Risks, ethics and law</li><li>Ways of working</li><li>Related work and datasets from papers</li>
 </ol>
 
 <h2 style="margin-top:8mm">1. Executive summary</h2>
@@ -345,7 +359,8 @@ doc = f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Bade
 <tr><td>C2</td><td>A normalisation method for exact therapeutic equivalence in a noisy national list (salts, units, per-ml strengths, combination totals)</td><td>500-pair gold set: precision, recall, error analysis</td></tr>
 <tr><td>C3</td><td>Bilingual, misspelling-tolerant drug search with learned ranking</td><td>Logistic regression vs LightGBM vs TF-IDF on synthetic and real queries; photo and voice benchmarks</td></tr>
 <tr><td>C4</td><td>A personalised safety layer and its measured precision</td><td>200 warnings reviewed by a pharmacist; LASA evaluation</td></tr>
-<tr><td>C5</td><td>Security by design for a health web app</td><td>Attack suite, ZAP and Burp results; tamper-evident log; blind index</td></tr>
+<tr><td>C5</td><td>Security by design for a health web app, including an LLM assistant</td><td>Attack suite, ZAP and Burp results; tamper-evident log; blind index; LLM red-team success rate</td></tr>
+<tr><td>C6</td><td>A bilingual assistant that answers only from verified drug data through tools</td><td>200-question evaluation vs the same LLM without tools</td></tr>
 </tbody></table>
 </section>
 
@@ -416,6 +431,41 @@ doc = f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Bade
 <div class="box"><b>Feature freeze on 14 January 2027.</b> After this date only bug fixes, text and accessibility changes go in. Anything unfinished moves to "future work" in the thesis, and stretch items are cut first.</div>
 </section>
 
+
+<section class="page">
+<h3 style="font-size:15pt;color:#0e7490;margin-top:0">6.6 Badeel Assistant — agent, recommendation system and chatbot</h3>
+<p>These are <b>one system, not three</b>. The chatbot is the interface. Behind it, an agent answers by calling Badeel's own code as tools, and the recommendation system is one of those tools. This keeps the work smaller and the evaluation clear.</p>
+<svg viewBox="0 0 900 250" class="diagram" xmlns="http://www.w3.org/2000/svg" font-family="Inter, sans-serif" font-size="11.5">
+<defs><marker id="a2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#475569"/></marker></defs>
+<rect x="10" y="20" width="170" height="70" rx="10" fill="#eef6ff" stroke="#93c5fd"/><text x="22" y="45" font-weight="700">Patient asks</text><text x="22" y="64">Egyptian Arabic / English</text><text x="22" y="80">"cheaper Augmentin?"</text>
+<rect x="215" y="20" width="200" height="70" rx="10" fill="#fff1f2" stroke="#fda4af"/><text x="227" y="45" font-weight="700" fill="#9f1239">Guard (in code)</text><text x="227" y="64">danger sign → emergency reply</text><text x="227" y="80">dose / diagnosis → refuse</text>
+<rect x="450" y="20" width="200" height="70" rx="10" fill="#f5f3ff" stroke="#c4b5fd"/><text x="462" y="45" font-weight="700">LLM agent</text><text x="462" y="64">chooses tools, writes the answer</text><text x="462" y="80">only from tool results + links</text>
+<rect x="685" y="20" width="200" height="70" rx="10" fill="#f0fdf4" stroke="#86efac"/><text x="697" y="45" font-weight="700">Answer with sources</text><text x="697" y="64">links to Badeel pages</text><text x="697" y="80">+ "ask your pharmacist"</text>
+<path d="M180 55H213M415 55H448M650 55H683" stroke="#475569" stroke-width="1.6" marker-end="url(#a2)"/>
+<path d="M550 90V128" stroke="#475569" stroke-width="1.6" marker-end="url(#a2)"/>
+<rect x="60" y="132" width="150" height="56" rx="8" fill="#fff" stroke="#94a3b8"/><text x="70" y="154" font-weight="700">search_drug</text><text x="70" y="172">learned ranker</text>
+<rect x="225" y="132" width="150" height="56" rx="8" fill="#ecfeff" stroke="#67e8f9"/><text x="235" y="154" font-weight="700">recommend</text><text x="235" y="172">exact + safe alternatives</text>
+<rect x="390" y="132" width="150" height="56" rx="8" fill="#fff" stroke="#94a3b8"/><text x="400" y="154" font-weight="700">check_interactions</text><text x="400" y="172">DDInter, duplicates</text>
+<rect x="555" y="132" width="150" height="56" rx="8" fill="#fff" stroke="#94a3b8"/><text x="565" y="154" font-weight="700">get_leaflet</text><text x="565" y="172">openFDA, SIDER</text>
+<rect x="720" y="132" width="150" height="56" rx="8" fill="#fefce8" stroke="#fde047"/><text x="730" y="154" font-weight="700">set_reminder</text><text x="730" y="172">only after consent</text>
+<text x="60" y="222" font-size="11" fill="#475569">Patient warnings (allergies, conditions, saved medicines) are computed on the server. The health profile is never sent to the LLM.</text>
+<text x="60" y="240" font-size="11" fill="#475569">Every tool call is logged (without medicine names); messages are rate-limited per user.</text>
+</svg>
+<div class="two">
+<div><h3>Recommendation system (#31)</h3><ul>
+<li><b>Personalised ranking</b> of exact alternatives: availability, unit price, the patient's warnings, how often users save it.</li>
+<li><b>Safe alternative with your medicines:</b> if the searched drug interacts with a saved one, suggest a drug of the same ATC class with no interaction. It is clearly marked "not an exact alternative, ask your doctor".</li>
+<li>Ideas from SafeDrug, GAMENet and TraceDR (§13). Their models are not trained here: they need MIMIC hospital data and solve a different problem.</li>
+<li>Measured with NDCG@5 against a price-only ranking.</li></ul></div>
+<div><h3>Chatbot + agent (#22), evaluation (#32)</h3><ul>
+<li>Retrieval-augmented: the LLM sees only tool results and must cite them.</li>
+<li>Rules enforced in code, not only in the prompt: no doses, no diagnosis, emergency reply on danger signs, actions only with consent.</li>
+<li>200-question test set; compared with the same LLM without tools, as in Almanac and MedRAG.</li>
+<li>Red-teamed by the security track (#25): prompt injection, data leakage, excessive agency.</li></ul></div>
+</div>
+<div class="box warn"><b>Why this matters:</b> in one evaluation, pharmacists found that free ChatGPT answered only 10 of 39 drug questions correctly and invented references. An assistant restricted to verified data, measured the same way, is a clear research result.</div>
+</section>
+
 <section class="page">
 <h2>7. Evaluation plan</h2>
 <p>Each claim in the thesis and the paper is tied to one experiment, one dataset and one script.</p>
@@ -479,6 +529,7 @@ doc = f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Bade
 <li>RQ2. How much does learned ranking improve bilingual misspelled search over a TF-IDF baseline, and how does LightGBM compare? Do results on generated queries hold for real ones? (C3)</li>
 <li>RQ3. What coverage and precision do open international sources reach when linked to Egyptian products? (C1, C4)</li>
 <li>RQ4. Is the system usable by patients, pharmacists and older adults? (SUS)</li>
+<li>RQ5. Does answering only through Badeel's tools make an LLM assistant more accurate and safer than the same LLM alone? (C6)</li>
 </ol>
 <p><b>Structure (IMRaD, 8–10 pages):</b> introduction, related work, data, method (normalisation, ranking, safety layer), experiments, results, discussion and limitations, conclusion.</p>
 <p><b>Candidate venues</b> (check each call for papers and deadline in January):</p>
@@ -489,7 +540,7 @@ doc = f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Bade
 <h3>Paper B — dataset paper (optional)</h3>
 <p>The linked Egyptian dataset (C1), submitted to <i>Data in Brief</i>, with the Zenodo DOI. It reuses chapter 5 and the coverage tables.</p>
 <h3>Paper C — security (optional)</h3>
-<p>A short paper on security by design for a health web app (C5): the attack suite, the tamper-evident log, blind-index allergy checks, and bot detection with a honeypot.</p>
+<p>A short paper on security by design for a health web app (C5): the attack suite, the tamper-evident log, blind-index allergy checks, bot detection with a honeypot, and red teaming of the LLM assistant (OWASP Top 10 for LLM applications).</p>
 <div class="box"><b>Writing rules:</b>
 <ul>
 <li>Every number in the paper comes from a script in <code>checks/</code>, <code>ml/</code> or <code>manage.py</code>.</li>
@@ -521,6 +572,20 @@ doc = f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Bade
 <li><b>Data changes</b> run through <code>manage.py</code> commands, so the database can be rebuilt from scratch.</li>
 <li><b>This plan</b> is updated at every milestone: statuses, dates, and anything moved to future work.</li>
 </ul>
+</section>
+
+<section class="page">
+<h2>13. Related work and datasets from papers</h2>
+<p><b>How to take data from a paper:</b></p>
+<ul>
+<li>Read its <b>Data availability</b> section. It usually links to GitHub, Zenodo, Hugging Face or Harvard Dataverse.</li>
+<li>If it says "available on request", e-mail the authors from the university address.</li>
+<li>Search Google Dataset Search, Hugging Face Datasets and Zenodo.</li>
+<li>Log every source in <code>data/EXTERNAL_SOURCES.md</code> with its licence, date, row count and what we use it for.</li>
+</ul>
+<p>Figures below come from the papers' abstracts. Check each against the full text before citing.</p>
+<table style="font-size:7.8pt"><thead><tr><th style="width:16%">Topic</th><th>Paper / source and link</th><th style="width:26%">What we take</th></tr></thead><tbody><tr><td>Drug names & search</td><td><b>Peters et al. 2011 — An approximate matching method for clinical drug names (AMIA)</b><br><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC3243188">https://pmc.ncbi.nlm.nih.gov/articles/PMC3243188</a></td><td>Baseline for misspelled drug names; 17,164 variants</td></tr><tr><td>Drug names & search</td><td><b>Kondrak &amp; Dorr 2006 — Automatic identification of confusable drug names (AI in Medicine)</b><br><a href="https://webdocs.cs.ualberta.ca/~kondrak/papers/aiim06.pdf">https://webdocs.cs.ualberta.ca/~kondrak/papers/aiim06.pdf</a></td><td>BI-SIM / ALINE similarity for look-alike names</td></tr><tr><td>Drug names & search</td><td><b>Nelson et al. 2011 — Normalized names for clinical drugs: RxNorm at 6 years (JAMIA)</b><br><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC3128404">https://pmc.ncbi.nlm.nih.gov/articles/PMC3128404</a></td><td>Reference for our name normalisation</td></tr><tr><td>Data sources</td><td><b>Tian et al. 2024 — DDInter 2.0 (Nucleic Acids Research)</b><br><a href="https://academic.oup.com/nar/article/53/D1/D1356/7740584">https://academic.oup.com/nar/article/53/D1/D1356/7740584</a></td><td>Interactions, drug–food, drug–disease, duplication</td></tr><tr><td>Data sources</td><td><b>Tatonetti et al. 2012 — Data-driven prediction of drug effects and interactions (TWOSIDES)</b><br><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC3382018">https://pmc.ncbi.nlm.nih.gov/articles/PMC3382018</a></td><td>Polypharmacy side effects</td></tr><tr><td>Data sources</td><td><b>Egyptian drug database (GitHub)</b><br><a href="https://github.com/karem505/egyptian-drug-database">https://github.com/karem505/egyptian-drug-database</a></td><td>Our base list, 25,070 rows</td></tr><tr><td>Recommendation</td><td><b>Yang et al. 2021 — SafeDrug (IJCAI)</b><br><a href="https://arxiv.org/pdf/2105.02711">https://arxiv.org/pdf/2105.02711</a></td><td>DDI-controlled recommendation</td></tr><tr><td>Recommendation</td><td><b>Shang et al. 2019 — GAMENet (AAAI)</b><br><a href="https://arxiv.org/abs/1809.01852">https://arxiv.org/abs/1809.01852</a></td><td>DDI knowledge graph in memory</td></tr><tr><td>Recommendation</td><td><b>TraceDR 2025 — Traceable drug recommendation over medical knowledge graphs</b><br><a href="https://arxiv.org/html/2510.27274v1">https://arxiv.org/html/2510.27274v1</a></td><td>Evidence shown with each suggestion</td></tr><tr><td>Chatbot / agent</td><td><b>Zakka et al. 2024 — Almanac: retrieval-augmented LMs for clinical medicine (NEJM AI)</b><br><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10857783">https://pmc.ncbi.nlm.nih.gov/articles/PMC10857783</a></td><td>Cited answers; 314-question evaluation</td></tr><tr><td>Chatbot / agent</td><td><b>Xiong et al. 2024 — Benchmarking RAG for medicine, MedRAG / MIRAGE (ACL Findings)</b><br><a href="https://arxiv.org/abs/2402.13178">https://arxiv.org/abs/2402.13178</a></td><td>RAG raised accuracy by up to 18%</td></tr><tr><td>Chatbot / agent</td><td><b>Rx Strategist 2024 — Prescription verification using LLM agents</b><br><a href="https://arxiv.org/pdf/2409.03440">https://arxiv.org/pdf/2409.03440</a></td><td>Agents + knowledge graph</td></tr><tr><td>Chatbot / agent</td><td><b>ChatGPT and drug questions: 10 of 39 correct (ASHP 2023, news report)</b><br><a href="https://www.cnbc.com/2023/12/05/free-chatgpt-may-incorrectly-answer-drug-questions-study-says.html">https://www.cnbc.com/2023/12/05/free-chatgpt-may-incorrectly-answer-drug-questions-study-says.html</a></td><td>Motivation for grounding</td></tr><tr><td>Arabic</td><td><b>AraMed — Arabic medical QA (OSACT 2024)</b><br><a href="https://aclanthology.org/2024.osact-1.6.pdf">https://aclanthology.org/2024.osact-1.6.pdf</a></td><td>270k consumer questions</td></tr><tr><td>Arabic</td><td><b>MAQA — Medical Arabic Q&amp;A dataset</b><br><a href="https://link.springer.com/doi/10.1007/s13278-023-01077-w">https://link.springer.com/doi/10.1007/s13278-023-01077-w</a></td><td>430k+ questions</td></tr><tr><td>Arabic</td><td><b>MedAraBench 2026</b><br><a href="https://www.arxiv.org/abs/2602.01714">https://www.arxiv.org/abs/2602.01714</a></td><td>Arabic medical LLM benchmark</td></tr><tr><td>Symptoms</td><td><b>Semigran et al. 2015 — Evaluation of symptom checkers (BMJ)</b><br><a href="https://dash.harvard.edu/handle/1/17820908">https://dash.harvard.edu/handle/1/17820908</a></td><td>45 vignettes to test our symptom page</td></tr><tr><td>Photo search</td><td><b>Pill box text recognition with DBNet-CRNN (IJERPH)</b><br><a href="https://mdpi.com/1660-4601/20/5/3881">https://mdpi.com/1660-4601/20/5/3881</a></td><td>OCR pipeline to compare</td></tr><tr><td>Photo search</td><td><b>DLI-IT drug label retrieval (BMC Med Inform Decis Mak)</b><br><a href="https://bmcmedinformdecismak.biomedcentral.com/articles/10.1186/s12911-020-1078-3">https://bmcmedinformdecismak.biomedcentral.com/articles/10.1186/s12911-020-1078-3</a></td><td>Image + text retrieval</td></tr><tr><td>Security</td><td><b>Crosby &amp; Wallach 2009 — Tamper-evident logging (USENIX Security)</b><br><a href="https://www.usenix.org/conference/usenixsecurity09/technical-sessions/presentation/efficient-data-structures-tamper-evident">https://www.usenix.org/conference/usenixsecurity09/technical-sessions/presentation/efficient-data-structures-tamper-evident</a></td><td>Basis of the hash-chained log</td></tr><tr><td>Security</td><td><b>OWASP Top 10 for LLM Applications 2025 (summary; cite owasp.org)</b><br><a href="https://www.hackerone.com/ai/owasp-top-10-llms-2025">https://www.hackerone.com/ai/owasp-top-10-llms-2025</a></td><td>Red-team categories</td></tr><tr><td>Security</td><td><b>Iwaya et al. — Security and privacy for mHealth: systematic mapping</b><br><a href="https://arxiv.org/pdf/2006.12069">https://arxiv.org/pdf/2006.12069</a></td><td>Related work for C5</td></tr><tr><td>Egypt context</td><td><b>Survey of Egyptian physicians on drug shortage (Bull. Fac. Pharm. Cairo Univ.)</b><br><a href="https://doaj.org/article/771dde258f25455ebe651503933ed0d8">https://doaj.org/article/771dde258f25455ebe651503933ed0d8</a></td><td>Motivation: shortage harm</td></tr></tbody></table>
+<p class="small">No published work was found that builds exact alternatives for the Egyptian market this way. That supports the novelty claim, but the literature review in Semester 2 must confirm it.</p>
 </section>
 </body></html>"""
 open(__import__("os").path.join(__import__("os").path.dirname(__import__("os").path.abspath(__file__)), "Badeel_Project_Plan.html"), "w", encoding="utf-8").write(doc)
