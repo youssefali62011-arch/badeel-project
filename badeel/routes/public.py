@@ -3,7 +3,7 @@ from flask import (Blueprint, abort, flash, g, jsonify, redirect, render_templat
                    session, url_for)
 
 from .. import db, security
-from ..services import conditions, interactions, labels, ocr, recommender, search as search_service
+from ..services import conditions, interactions, labels, lasa, ocr, recommender, side_effects, symptoms, search as search_service
 from ..services.normalize import canon_ingredient, display_name
 
 bp = Blueprint("public", __name__)
@@ -134,6 +134,7 @@ def drug(drug_id):
         leaflet_sections=labels.SECTION_LABELS, saved_interactions=saved_interactions,
         interaction_count=interactions.count_for(d), severity_labels=interactions.SEVERITY_LABELS,
         disease=disease, condition_warnings=condition_warnings,
+        lasa_pairs=lasa.for_drug(d), side_effects=side_effects.for_drug(d),
         concept_group=conditions.CONCEPT_TO_GROUP)
 
 
@@ -163,6 +164,20 @@ def disease():
     ingredients, products = conditions.products_treating(concepts)
     return render_template("disease.html", title=title, concepts=concepts, group=group,
                            ingredients=[display_name(i) for i in ingredients], drugs=products)
+
+
+@bp.route("/symptoms")
+def symptom_explorer():
+    """What could help with these symptoms? Information to take to a pharmacist or doctor."""
+    picked = [k for k in request.args.getlist("s") if k in symptoms.SYMPTOMS][:6]
+    flags = symptoms.red_flags_ticked(request.args.getlist("rf"))
+    asked = bool(picked or flags)
+    results = [] if flags else symptoms.explore(
+        picked, user=g.user, pregnant=request.args.get("pregnant") == "1",
+        breastfeeding=request.args.get("breastfeeding") == "1", child=request.args.get("child") == "1")
+    return render_template("symptoms.html", symptoms=symptoms.SYMPTOMS, areas=symptoms.AREAS,
+                           red_flags=symptoms.RED_FLAGS, picked=set(picked), flags=flags, asked=asked,
+                           results=results, args=request.args, display_name=display_name)
 
 
 @bp.route("/about")

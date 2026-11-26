@@ -1,0 +1,31 @@
+key,area,label_en,label_ar,concepts,forms
+fever,general,Fever,سخونية,Fever,oral;rectal
+pain,general,General pain,ألم عام,Pain,oral;rectal;skin
+headache,head,Headache,صداع,Headache disorder;Tension-type headache;Sinus headache,oral
+migraine,head,Migraine,صداع نصفي,Migraine,oral;nose
+toothache,head,Toothache,ألم في السنان,Toothache,oral;mouth
+cold,breathing,Cold or flu,برد أو إنفلونزا,Common cold;Influenza-like symptoms,oral;nose
+stuffy_nose,breathing,Stuffy or runny nose,زكام وانسداد الأنف,Nasal congestion;Rhinitis,oral;nose
+cough,breathing,Cough,كحة,Cough;Non-productive cough,oral
+sore_throat,breathing,Sore throat,التهاب أو ألم الزور,Sore throat symptom;Pharyngitis,oral;mouth
+nose_allergy,allergy,Sneezing and nose allergy,عطس وحساسية الأنف,Allergic rhinitis;Seasonal allergic rhinitis,oral;nose
+itchy_skin,allergy,Itchy skin or hives,حكة أو أرتيكاريا,Itching of skin;Urticaria,oral;skin
+eye_allergy,allergy,Itchy red eyes,حساسية في العين,Allergic conjunctivitis;Ocular Itching,eye
+heartburn,stomach,Heartburn or acid,حموضة وحرقان,Heartburn;Gastroesophageal reflux disease,oral
+nausea,stomach,Nausea or vomiting,غثيان أو ترجيع,Nausea;Vomiting;Nausea and vomiting,oral;rectal
+diarrhea,stomach,Diarrhea,إسهال,Diarrhea;Acute diarrhea;Traveler's diarrhea,oral
+constipation,stomach,Constipation,إمساك,Constipation;Chronic constipation,oral;rectal
+gas,stomach,Gas and bloating,غازات وانتفاخ,Flatulence symptom,oral
+motion,stomach,Motion sickness,دوخة السفر,Motion sickness;Prevention of motion sickness,oral
+hemorrhoids,stomach,Hemorrhoids,بواسير,Hemorrhoids,skin;rectal
+period_pain,body,Period pain,ألم الدورة الشهرية,Dysmenorrhea,oral
+joint_pain,body,Joint pain,ألم في المفاصل,Joint pain;Osteoarthritis,oral;skin
+muscle_spasm,body,Muscle spasm,شد عضلي,Muscle Spasm with Pain,oral;skin
+insomnia,body,Trouble sleeping,أرق وصعوبة في النوم,Insomnia,oral
+acne,skin,Acne,حب الشباب,Acne vulgaris,skin
+dandruff,skin,Dandruff,قشرة,Seborrheic dermatitis,skin
+fungal_skin,skin,Fungal skin infection,فطريات في الجلد أو القدم,Tinea pedis;Tinea corporis;Tinea cruris,skin
+cold_sore,skin,Cold sore on the lip,قرحة برد على الشفايف,Herpes labialis,skin
+mouth_ulcer,skin,Mouth ulcer,قرحة في البق,Aphthous ulcer of mouth,mouth
+minor_wound,skin,Minor cut or burn,جرح أو حرق بسيط,Minor Skin Wound Pain;Wound,skin
+dry_eye,skin,Dry eyes,جفاف في العين,Dry eye disease,eye

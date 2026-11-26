@@ -63,6 +63,10 @@
             <a href="{{ url_for('account.history') }}">{{ icon('clock') }}{{ _('Search history', 'سجل البحث') }}</a>
             <a href="{{ url_for('account.profile') }}">{{ icon('user') }}{{ _('Health profile and account', 'ملفي الصحي والحساب') }}</a>
           {% endif %}
+          {% if role in ('admin', 'pharmacist') %}
+            <a href="{{ url_for('pharmacist.combinations') }}">{{ icon('check') }}{{ _('Combination strengths', 'تركيزات الأدوية المركبة') }}</a>
+          {% endif %}
+          <a href="{{ url_for('public.symptom_explorer') }}">{{ icon('activity') }}{{ _('What could help my symptoms?', 'إيه اللي يساعد في أعراضي؟') }}</a>
           <a href="{{ url_for('public.about') }}">{{ icon('info') }}{{ _('How matching works', 'كيف تتم المطابقة') }}</a>
         </div>
       </details>

@@ -531,3 +531,30 @@ a.stat:hover { border-color: var(--neon); box-shadow: var(--glow); color: inheri
               border-radius: var(--radius); background: var(--surface); border: 1px dashed var(--line-strong); }
 .notify-text { flex: 1 1 18rem; }
 .js .notify-bar.needs-js:not([hidden]) { display: flex; }
+
+/* ---------- symptom explorer, look-alike names, side effects ---------- */
+.symptom-form { display: grid; gap: 14px; margin: 18px 0; }
+.symptom-form fieldset { border: 1px solid var(--line); border-radius: var(--radius); padding: 12px 14px; background: var(--surface); }
+.symptom-form legend { padding: 0 6px; font-weight: 700; }
+.symptom-form .check-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 8px; }
+.symptom-form .choice { display: flex; gap: 8px; align-items: center; padding: 8px 10px; border: 1px solid var(--line);
+  border-radius: var(--radius-sm); cursor: pointer; transition: border-color .15s, background .15s; }
+.symptom-form .choice:has(input:checked) { border-color: var(--neon); background: var(--match-bg); }
+.symptom-form .choice.danger:has(input:checked) { border-color: var(--danger); background: var(--danger-bg); }
+.symptom-form .btn { justify-self: start; }
+.red-flags { border: 1px dashed var(--danger); border-radius: var(--radius); padding: 10px 14px; }
+.red-flags summary { cursor: pointer; font-weight: 700; color: var(--danger); display: flex; gap: 8px; align-items: center; }
+.red-flags .check-grid { margin-top: 10px; }
+.risk-banner { display: flex; gap: 14px; align-items: flex-start; padding: 16px 18px; margin: 16px 0;
+  border-radius: var(--radius); background: var(--danger-bg); border: 2px solid var(--danger); color: var(--ink); }
+.risk-banner .ic { width: 32px; height: 32px; color: var(--danger); flex: none; }
+.risk-banner strong { font-size: 1.15rem; }
+.risk-banner p { margin: 6px 0 0; }
+.symptom-result.has-warning { border-inline-start: 3px solid var(--differs); }
+.sym-warn { display: flex; gap: 6px; align-items: center; margin: 6px 0 0; color: var(--differs); font-size: .93rem; }
+.sym-warn .ic { width: 16px; height: 16px; flex: none; }
+.sym-products { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 8px; }
+.side-list { list-style: none; padding: 0; margin: 8px 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 6px; }
+.side-list li { display: flex; justify-content: space-between; gap: 10px; padding: 8px 12px; border: 1px solid var(--line); border-radius: var(--radius-sm); }
+.side-list b { color: var(--muted); font-variant-numeric: tabular-nums; }
+.lasa small { display: block; }

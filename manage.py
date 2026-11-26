@@ -11,7 +11,13 @@
     python manage.py import-csv FILE      import drugs from a CSV file
     python manage.py import-csv FILE --replace    delete current drugs first
     python manage.py collect-data         download DDInter + openFDA leaflets and load them
-    python manage.py collect-data --source ddinter    only one source (ddinter | labels | drugcentral)
+    python manage.py collect-data --source ddinter    only one source (ddinter | labels | drugcentral |
+                                                       ismp | sider | otc | rxnorm)
+    python manage.py load-lasa [PDF]      look-alike names: ISMP list + similar Egyptian brands
+    python manage.py load-side-effects DIR   SIDER 4.1 folder (drug_names.tsv, meddra_freq.tsv.gz)
+    python manage.py load-otc [PDF]       ingredients on the EDA list of medicines without a prescription
+    python manage.py rxnorm-map [--limit N]   look up the RxNorm name of every ingredient (internet)
+    python manage.py rxnorm-combos        propose strengths for combination products (pharmacist approves)
     python manage.py load-interactions FILE...        load DDInter CSV files downloaded by hand
     python manage.py load-labels FILE...              load openFDA label files downloaded by hand
     python manage.py load-conditions FILE             load the DrugCentral dump downloaded by hand
@@ -31,7 +37,7 @@ import sys
 from flask import current_app
 
 from badeel import create_app, db, security
-from badeel.services import conditions, coverage, export, importer, reminders, interactions, labels, ranker, search, sources
+from badeel.services import conditions, eda, lasa, rxnorm, side_effects, symptoms, coverage, export, importer, reminders, interactions, labels, ranker, search, sources
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 
@@ -226,6 +232,36 @@ def cmd_load_conditions(args):
     _load_conditions(args.files)
 
 
+def cmd_load_lasa(args):
+    pdf = args.pdf or sources.fetch_ismp()
+    ismp = lasa.read_ismp_pdf(pdf)
+    local = lasa.find_local_pairs([(r["trade_name"], r["ingredient_key"])
+                                   for r in db.query("SELECT trade_name, ingredient_key FROM drugs")])
+    r = lasa.load(ismp, local)
+    print(f"Look-alike names: {r['ismp']:,} ISMP pairs, {r['local']:,} similar Egyptian brand pairs.")
+
+
+def cmd_load_side_effects(args):
+    r = side_effects.load_sider(args.dir or sources.fetch_sider())
+    print(f"SIDER: {r['rows']:,} side effects with a frequency, for {r['ingredients']:,} ingredient names.")
+
+
+def cmd_load_otc(args):
+    n = symptoms.load_otc(eda.read_otc_list(args.pdf or sources.fetch_eda_otc()))
+    print(f"EDA OTC list: {n:,} ingredients of the drug list can be sold without a prescription.")
+
+
+def cmd_rxnorm_map(args):
+    r = rxnorm.map_ingredients(limit=args.limit)
+    print(f"RxNorm: {r['checked']:,} ingredient names checked, {r['found']:,} found.")
+
+
+def cmd_rxnorm_combos(_args):
+    r = rxnorm.suggest_combinations()
+    print(f"RxNorm: {r['product_groups']:,} combination groups show only a total strength, "
+          f"{r['groups_checked']:,} checked, {r['proposals']:,} proposals waiting for a pharmacist.")
+
+
 def cmd_collect_data(args):
     """Download the outside sources into data/raw/ and load them."""
     if args.source in ("all", "ddinter"):
@@ -237,6 +273,23 @@ def cmd_collect_data(args):
     if args.source in ("all", "drugcentral"):
         print("DrugCentral (what each ingredient treats and must not be used with). About 1.4 GB.")
         _load_conditions(sources.fetch_drugcentral())
+    if args.source in ("all", "ismp"):
+        print("ISMP list of confused drug names, and similar Egyptian brands")
+        args.pdf = None
+        cmd_load_lasa(args)
+    if args.source in ("all", "sider"):
+        print("SIDER 4.1 (side effects)")
+        args.dir = None
+        cmd_load_side_effects(args)
+    if args.source in ("all", "otc"):
+        print("EDA list of medicines sold without a prescription")
+        args.pdf = None
+        cmd_load_otc(args)
+    if args.source in ("all", "rxnorm"):
+        print("RxNorm names (about 12 lookups a second: about 15 minutes the first time)")
+        args.limit = None
+        cmd_rxnorm_map(args)
+        cmd_rxnorm_combos(args)
     cmd_enrichment_report(args)
 
 
@@ -324,7 +377,7 @@ def main():
     p.add_argument("--replace", action="store_true")
     p.set_defaults(func=cmd_import)
     p = sub.add_parser("collect-data")
-    p.add_argument("--source", choices=["all", "ddinter", "labels", "drugcentral"], default="all")
+    p.add_argument("--source", choices=["all", "ddinter", "labels", "drugcentral", "ismp", "sider", "otc", "rxnorm"], default="all")
     p.set_defaults(func=cmd_collect_data)
     p = sub.add_parser("load-interactions")
     p.add_argument("files", nargs="+")
@@ -347,6 +400,19 @@ def main():
     p = sub.add_parser("export-dataset")
     p.add_argument("dir")
     p.set_defaults(func=cmd_export_dataset)
+    p = sub.add_parser("load-lasa")
+    p.add_argument("pdf", nargs="?")
+    p.set_defaults(func=cmd_load_lasa)
+    p = sub.add_parser("load-side-effects")
+    p.add_argument("dir", nargs="?")
+    p.set_defaults(func=cmd_load_side_effects)
+    p = sub.add_parser("load-otc")
+    p.add_argument("pdf", nargs="?")
+    p.set_defaults(func=cmd_load_otc)
+    p = sub.add_parser("rxnorm-map")
+    p.add_argument("--limit", type=int)
+    p.set_defaults(func=cmd_rxnorm_map)
+    sub.add_parser("rxnorm-combos").set_defaults(func=cmd_rxnorm_combos)
     sub.add_parser("enrichment-report").set_defaults(func=cmd_enrichment_report)
     args = parser.parse_args()
 
